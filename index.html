@@ -1,0 +1,1609 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>开发者信息 - 老虎开放平台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --tiger-yellow: #FFCC00;
+            --tiger-yellow-hover: #e6b800;
+            --tiger-dark: #1a1a2e;
+            --tiger-nav: #16213e;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --red-500: #ef4444;
+            --green-600: #16a34a;
+            --blue-600: #2563eb;
+            --yellow-100: #fef9c3;
+            --yellow-800: #854d0e;
+            --orange-50: #fff7ed;
+            --orange-100: #ffedd5;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--gray-50);
+            min-height: 100vh;
+            color: var(--gray-800);
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ===== TOP NAV ===== */
+        .top-nav {
+            background: var(--tiger-dark);
+            padding: 0 32px;
+            height: 52px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .nav-logo {
+            width: 24px;
+            height: 24px;
+            background: var(--tiger-yellow);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 800;
+            color: var(--tiger-dark);
+        }
+
+        .nav-brand {
+            font-size: 14px;
+            font-weight: 700;
+            color: #fff;
+            letter-spacing: 0.5px;
+        }
+
+        .nav-right {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+        }
+
+        .nav-link {
+            font-size: 13px;
+            color: #a0a6b4;
+            text-decoration: none;
+            transition: color 0.15s;
+            cursor: pointer;
+        }
+
+        .nav-link:hover { color: #fff; }
+
+        .nav-btn-logout {
+            font-size: 12px;
+            padding: 4px 14px;
+            border: 1px solid #4a4a6a;
+            border-radius: 4px;
+            color: #a0a6b4;
+            background: transparent;
+            cursor: pointer;
+            transition: all 0.15s;
+        }
+
+        .nav-btn-logout:hover {
+            border-color: #8a8aaa;
+            color: #fff;
+        }
+
+        /* ===== MAIN CONTENT ===== */
+        .page-container {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 40px 32px;
+        }
+
+        .page-title {
+            font-size: 22px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 24px;
+        }
+
+        /* ===== TABS ===== */
+        .tabs {
+            display: flex;
+            border-bottom: none;
+            margin-bottom: 0;
+            flex-direction: column;
+            width: 180px;
+            flex-shrink: 0;
+            padding-right: 32px;
+        }
+
+        .tab-item {
+            padding: 10px 16px;
+            margin-right: 0;
+            margin-bottom: 4px;
+            font-size: 14px;
+            color: var(--gray-500);
+            cursor: pointer;
+            position: relative;
+            transition: all 0.15s;
+            user-select: none;
+            border-radius: 8px;
+        }
+
+        .tab-item:hover { color: var(--gray-700); background: var(--gray-100); }
+
+        .tab-item.active {
+            color: var(--gray-900);
+            font-weight: 600;
+            background: var(--gray-100);
+        }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            top: 8px;
+            bottom: 8px;
+            left: 0;
+            width: 3px;
+            border-radius: 2px;
+            background: var(--gray-900);
+        }
+
+        /* ===== LAYOUT ===== */
+        .content-layout {
+            display: flex;
+            gap: 0;
+        }
+
+        .tab-content-area {
+            flex: 1;
+            min-width: 0;
+        }
+
+        /* ===== TAB CONTENT ===== */
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
+
+        /* ===== 授权应用 TAB ===== */
+        .oauth-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 24px;
+        }
+
+        .oauth-subtitle {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        .btn-create {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 18px;
+            background: var(--tiger-yellow);
+            color: var(--gray-900);
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-create:hover { background: var(--tiger-yellow-hover); }
+
+        .btn-create svg {
+            width: 14px;
+            height: 14px;
+        }
+
+        /* Empty State */
+        .empty-state {
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 80px 40px;
+            text-align: center;
+        }
+
+        .empty-icon {
+            width: 64px;
+            height: 64px;
+            background: var(--gray-100);
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .empty-icon svg {
+            width: 28px;
+            height: 28px;
+            stroke: var(--gray-400);
+        }
+
+        .empty-text {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* App Table */
+        .app-table-container {
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            overflow: hidden;
+            display: none;
+        }
+
+        .app-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .app-table thead {
+            background: var(--gray-50);
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .app-table th {
+            text-align: left;
+            padding: 12px 20px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-500);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .app-table th:last-child { text-align: right; }
+
+        .app-table td {
+            padding: 14px 20px;
+            font-size: 13px;
+            color: var(--gray-700);
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .app-table td:last-child { text-align: right; }
+
+        .app-table tr:last-child td { border-bottom: none; }
+
+        .app-table tr:hover td { background: var(--gray-50); }
+
+        .app-name { font-weight: 600; color: var(--gray-900); }
+
+        .client-id { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gray-600); }
+
+        .status-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            font-size: 11px;
+            font-weight: 500;
+            border-radius: 4px;
+            background: var(--yellow-100);
+            color: var(--yellow-800);
+        }
+
+        .table-link {
+            font-size: 13px;
+            color: var(--blue-600);
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .table-link:hover { text-decoration: underline; }
+
+        /* ===== 个人信息 TAB ===== */
+        .info-card {
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .info-section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 20px;
+        }
+
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px 48px;
+            margin-bottom: 24px;
+        }
+
+        .info-row {
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+        }
+
+        .info-label {
+            color: var(--gray-500);
+            min-width: 100px;
+        }
+
+        .info-value {
+            color: var(--gray-900);
+            font-weight: 500;
+        }
+
+        .info-hint {
+            font-size: 11px;
+            color: var(--gray-400);
+            margin-left: 8px;
+        }
+
+        .asset-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .asset-type-tags {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .asset-type-label {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .asset-tag {
+            padding: 3px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 4px;
+            cursor: pointer;
+            border: 1px solid var(--gray-300);
+            background: #fff;
+            color: var(--gray-700);
+            transition: all 0.15s;
+        }
+
+        .asset-tag.active {
+            background: var(--tiger-yellow);
+            border-color: var(--tiger-yellow);
+            color: var(--gray-900);
+        }
+
+        .asset-rows {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .asset-row {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+
+        .asset-row-label { color: var(--gray-500); }
+        .asset-row-value { color: var(--gray-900); font-weight: 500; }
+
+        /* RSA Section */
+        .rsa-section {
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--gray-100);
+        }
+
+        .rsa-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 16px;
+        }
+
+        .rsa-label-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .rsa-label {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        .rsa-copy-btn {
+            font-size: 12px;
+            color: var(--blue-600);
+            cursor: pointer;
+            background: none;
+            border: none;
+            font-family: inherit;
+        }
+
+        .rsa-box {
+            background: var(--orange-50);
+            border: 1px solid var(--orange-100);
+            border-radius: 8px;
+            padding: 16px;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 11px;
+            color: var(--gray-600);
+            line-height: 1.6;
+            word-break: break-all;
+        }
+
+        .rsa-actions {
+            margin-top: 12px;
+            display: flex;
+            justify-content: flex-end;
+        }
+
+        .btn-regen {
+            padding: 6px 16px;
+            background: var(--tiger-yellow);
+            border: none;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-900);
+            cursor: pointer;
+            transition: background 0.15s;
+        }
+
+        .btn-regen:hover { background: var(--tiger-yellow-hover); }
+
+        /* ===== MODAL ===== */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s ease;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            width: 100%;
+            max-width: 520px;
+            max-height: 85vh;
+            overflow-y: auto;
+            box-shadow: 0 25px 60px rgba(0, 0, 0, 0.3);
+            transform: scale(0.95) translateY(10px);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1) translateY(0);
+        }
+
+        .modal-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 28px 32px 0;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .modal-close {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            border-radius: 8px;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: all 0.15s;
+        }
+
+        .modal-close:hover {
+            background: var(--gray-100);
+            color: var(--gray-600);
+        }
+
+        .modal-close svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .modal-body {
+            padding: 28px 32px 32px;
+        }
+
+        /* Form Fields */
+        .form-group {
+            margin-bottom: 22px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 8px;
+        }
+
+        .form-label .required {
+            color: var(--red-500);
+            margin-left: 2px;
+        }
+
+        .form-label .optional {
+            color: var(--gray-400);
+            font-weight: 400;
+            margin-left: 4px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: inherit;
+            color: var(--gray-800);
+            transition: border-color 0.15s, box-shadow 0.15s;
+            outline: none;
+            background: #fff;
+        }
+
+        .form-input::placeholder { color: var(--gray-300); }
+
+        .form-input:focus {
+            border-color: var(--tiger-yellow);
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.12);
+        }
+
+        .form-input.mono {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 12px;
+        }
+
+        .form-input.error { border-color: var(--red-500); }
+
+        .form-input-number {
+            width: 100px;
+            padding: 10px 14px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 13px;
+            font-family: 'JetBrains Mono', monospace;
+            color: var(--gray-800);
+            outline: none;
+            transition: border-color 0.15s, box-shadow 0.15s;
+        }
+
+        .form-input-number:focus {
+            border-color: var(--tiger-yellow);
+            box-shadow: 0 0 0 3px rgba(255, 204, 0, 0.12);
+        }
+
+        .form-helper {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-top: 6px;
+        }
+
+        .form-row-inline {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-unit {
+            font-size: 13px;
+            color: var(--gray-500);
+        }
+
+        /* Toggle */
+        .toggle-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: var(--gray-50);
+            border: 1px solid var(--gray-100);
+            border-radius: 10px;
+            padding: 14px 16px;
+        }
+
+        .toggle-label {
+            font-size: 13px;
+            color: var(--gray-700);
+        }
+
+        .toggle-switch {
+            width: 38px;
+            height: 22px;
+            border-radius: 11px;
+            background: var(--gray-300);
+            cursor: pointer;
+            position: relative;
+            transition: background 0.2s;
+            flex-shrink: 0;
+        }
+
+        .toggle-switch.on { background: var(--gray-900); }
+
+        .toggle-switch::after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 18px;
+            height: 18px;
+            background: #fff;
+            border-radius: 50%;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+            transition: transform 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .toggle-switch.on::after {
+            transform: translateX(16px);
+        }
+
+        /* URL Fields */
+        .url-fields-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .btn-add-url {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 12px;
+            font-weight: 500;
+            color: var(--gray-700);
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-family: inherit;
+            transition: color 0.15s;
+        }
+
+        .btn-add-url:hover { color: var(--gray-900); }
+
+        .btn-add-url svg { width: 12px; height: 12px; }
+
+        .url-field-row {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            margin-bottom: 8px;
+        }
+
+        .url-field-row .form-input { flex: 1; }
+
+        .btn-delete-url {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: none;
+            background: none;
+            border-radius: 6px;
+            cursor: pointer;
+            color: var(--gray-400);
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+
+        .btn-delete-url:hover {
+            background: #fef2f2;
+            color: var(--red-500);
+        }
+
+        .btn-delete-url svg { width: 16px; height: 16px; }
+
+        /* Modal Footer */
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            padding-top: 20px;
+            border-top: 1px solid var(--gray-100);
+            margin-top: 8px;
+        }
+
+        .btn-cancel {
+            padding: 9px 20px;
+            font-size: 13px;
+            font-weight: 500;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            background: #fff;
+            color: var(--gray-600);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+        }
+
+        .btn-cancel:hover { background: var(--gray-50); border-color: var(--gray-300); }
+
+        .btn-submit {
+            padding: 9px 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            background: var(--tiger-yellow);
+            color: var(--gray-900);
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.15s;
+        }
+
+        .btn-submit:hover { background: var(--tiger-yellow-hover); }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-10px);
+            z-index: 2000;
+            background: var(--green-600);
+            color: #fff;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 500;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.3s ease;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* Tooltip */
+        .tooltip-trigger {
+            position: relative;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .tooltip-trigger::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: calc(100% + 8px);
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--gray-900);
+            color: #fff;
+            font-size: 12px;
+            font-weight: 400;
+            line-height: 1.5;
+            padding: 10px 14px;
+            border-radius: 8px;
+            width: 280px;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.15s;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .tooltip-trigger:hover::after {
+            opacity: 1;
+        }
+
+        /* Scrollbar */
+        .modal-box::-webkit-scrollbar { width: 6px; }
+        .modal-box::-webkit-scrollbar-track { background: transparent; }
+        .modal-box::-webkit-scrollbar-thumb { background: var(--gray-300); border-radius: 3px; }
+    </style>
+</head>
+<body>
+
+    <!-- Top Navigation -->
+    <nav class="top-nav">
+        <div class="nav-left">
+            <div class="nav-logo">T</div>
+            <span class="nav-brand">老虎开放平台</span>
+        </div>
+        <div class="nav-right">
+            <a class="nav-link">管理中心</a>
+            <a class="nav-link">文档</a>
+            <a class="nav-link">联系我们</a>
+            <a class="nav-link">中/EN</a>
+            <a class="nav-link">地区</a>
+            <button class="nav-btn-logout">退出</button>
+        </div>
+    </nav>
+
+    <!-- Page Content -->
+    <div class="page-container">
+        <!-- Layout: Left Tabs + Right Content -->
+        <div class="content-layout">
+            <!-- Left Tabs -->
+            <div class="tabs">
+                <div class="tab-item" data-tab="personal" onclick="switchTab('personal')">开发者信息</div>
+                <div class="tab-item active" data-tab="oauth" onclick="switchTab('oauth')">授权应用</div>
+                <div class="tab-item" data-tab="subscription" onclick="switchTab('subscription')" style="color:var(--gray-300);pointer-events:none;cursor:not-allowed;">订阅管理</div>
+            </div>
+
+            <!-- Right Content -->
+            <div class="tab-content-area">
+
+        <!-- 个人信息 -->
+        <div id="tab-personal" class="tab-content">
+            <h1 class="page-title">开发者信息</h1>
+            <div class="info-card">
+                <h2 class="info-section-title">管理中心</h2>
+                <div class="info-grid">
+                    <div class="info-row">
+                        <span class="info-label">Tiger ID:</span>
+                        <span class="info-value">2038****</span>
+                        <span class="info-hint">(用于开放平台的用户ID)</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">情型:</span>
+                        <span class="info-value">TBNZ</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">实盘账户:</span>
+                        <span class="info-value">****8832</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">模拟盘账户:</span>
+                        <span class="info-value">****6601</span>
+                    </div>
+                </div>
+
+                <div class="asset-section">
+                    <div>
+                        <div class="asset-type-tags">
+                            <span class="asset-type-label">资产类型:</span>
+                            <span class="asset-tag active">股票</span>
+                            <span class="asset-tag">期货</span>
+                        </div>
+                        <div class="asset-rows">
+                            <div class="asset-row"><span class="asset-row-label">总资产:</span><span class="asset-row-value">10443.86</span></div>
+                            <div class="asset-row"><span class="asset-row-label">证券总价值:</span><span class="asset-row-value">6638.13</span></div>
+                            <div class="asset-row"><span class="asset-row-label">现金额:</span><span class="asset-row-value">3857.08</span></div>
+                            <div class="asset-row"><span class="asset-row-label">剩余流动性:</span><span class="asset-row-value">3927.30</span></div>
+                            <div class="asset-row"><span class="asset-row-label">杠杆:</span><span class="asset-row-value">未使用</span></div>
+                            <div class="asset-row"><span class="asset-row-label">最大购买力:</span><span class="asset-row-value">12170.30</span></div>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="asset-type-tags">
+                            <span class="asset-type-label">资产类型:</span>
+                            <span class="asset-tag active">股票</span>
+                            <span class="asset-tag">期货</span>
+                        </div>
+                        <div class="asset-rows">
+                            <div class="asset-row"><span class="asset-row-label">总资产:</span><span class="asset-row-value">1000000.00</span></div>
+                            <div class="asset-row"><span class="asset-row-label">证券总价值:</span><span class="asset-row-value">0.00</span></div>
+                            <div class="asset-row"><span class="asset-row-label">现金额:</span><span class="asset-row-value">1000000.00</span></div>
+                            <div class="asset-row"><span class="asset-row-label">剩余流动性:</span><span class="asset-row-value">1000000.00</span></div>
+                            <div class="asset-row"><span class="asset-row-label">杠杆:</span><span class="asset-row-value">未使用</span></div>
+                            <div class="asset-row"><span class="asset-row-label">最大购买力:</span><span class="asset-row-value">4000000.00</span></div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- RSA KEY -->
+            <div class="info-card" style="margin-top: 24px;">
+                <h2 class="info-section-title" style="display:flex;align-items:center;gap:8px;"><span style="width:3px;height:18px;background:var(--tiger-yellow);border-radius:2px;display:inline-block;"></span>您的RSA KEY</h2>
+                    <div class="rsa-label-row">
+                        <span class="rsa-label">RSA公钥</span>
+                        <button class="rsa-copy-btn">复制</button>
+                    </div>
+                    <div class="rsa-box">MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDPbsRINgdym50T6POjeBKPWzNRe3f0Haw+gBdVdyls0UNGSlvrobqpwrWvxl0n1wx6l7GOfKN+P8iEuMKNPomVfmveE/AcheHUpEA//QoA/RUexSLgxBgKJdYYDro/Ii6MCk9QSgNpFB+UVIbXke9MYFXpESCBWWMfxchKKYQ2QIDAQAB</div>
+                    <div class="rsa-actions">
+                        <button class="btn-regen">重新生成</button>
+                    </div>
+            </div>
+
+            <!-- 其他设置 -->
+            <div class="info-card" style="margin-top: 24px;">
+                <h2 class="info-section-title" style="display:flex;align-items:center;gap:8px;"><span style="width:3px;height:18px;background:var(--tiger-yellow);border-radius:2px;display:inline-block;"></span>其他设置</h2>
+
+                <div class="form-group" style="margin-top:20px;">
+                    <label class="form-label" style="font-weight:500;">白名单IP地址 <span style="font-weight:400;color:var(--gray-400);font-size:12px;">（非必填。填写后，只有白名单内的IP可以访问。多个IP以；分隔。）</span></label>
+                    <input class="form-input" type="text" placeholder="">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" style="font-weight:500;">回调URL <span style="font-weight:400;color:var(--gray-400);font-size:12px;">（非必填。用于接受回调信息，如果返回状态不是200，会使用POST请求重复推送最多5次）</span></label>
+                    <input class="form-input" type="text" placeholder="">
+                </div>
+
+                <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:16px;">
+                    <button class="btn-submit">修改</button>
+                    <button class="btn-cancel">Ping</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 授权应用 -->
+        <div id="tab-oauth" class="tab-content active">
+            <div class="oauth-header">
+                <p class="oauth-subtitle">支持查看授权应用对您账户的访问权限</p>
+                <button class="btn-create" onclick="openModal()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                    创建应用
+                </button>
+            </div>
+
+            <div id="empty-state" class="empty-state">
+                <div class="empty-icon">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4"/></svg>
+                </div>
+                <p class="empty-text">暂无应用</p>
+            </div>
+
+            <div id="app-table" class="app-table-container">
+                <table class="app-table">
+                    <thead>
+                        <tr>
+                            <th>应用名称</th>
+                            <th style="display:flex;align-items:center;gap:4px;">Client ID <span class="tooltip-trigger" data-tip="应用唯一标识"><svg style="width:13px;height:13px;color:var(--gray-400);cursor:help;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg></span></th>
+                            <th>状态</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                    </thead>
+                    <tbody id="app-tbody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- 订阅管理 -->
+        <div id="tab-subscription" class="tab-content">
+            <!-- 当前权益状态 -->
+            <div class="info-card">
+                <h2 class="info-section-title" style="display:flex;align-items:center;gap:8px;"><span style="width:3px;height:18px;background:var(--tiger-yellow);border-radius:2px;display:inline-block;"></span>当前权益状态</h2>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px;">
+                    <!-- 行情订阅额度 -->
+                    <div>
+                        <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">行情订阅额度</p>
+                        <table style="width:100%;border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left;font-size:12px;color:var(--gray-400);font-weight:500;padding:8px 0;border-bottom:1px solid var(--gray-100);"></th>
+                                    <th style="text-align:right;font-size:12px;color:var(--gray-400);font-weight:500;padding:8px 0;border-bottom:1px solid var(--gray-100);">默认额度</th>
+                                    <th style="text-align:right;font-size:12px;color:var(--gray-400);font-weight:500;padding:8px 0;border-bottom:1px solid var(--gray-100);">剩余可用额度</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;border-bottom:1px solid var(--gray-50);">历史行情-股票/ETF</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">200</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">200</td></tr>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;border-bottom:1px solid var(--gray-50);">历史行情-期货</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">20</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">20</td></tr>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;border-bottom:1px solid var(--gray-50);">历史行情-期权</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">200</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">200</td></tr>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;border-bottom:1px solid var(--gray-50);">实时行情-标准行情</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">100</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">100</td></tr>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;">实时行情-摆盘行情</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;">20</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;">20</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <!-- 接口请求频率 -->
+                    <div>
+                        <p style="font-size:13px;color:var(--gray-500);margin-bottom:12px;">接口请求频率</p>
+                        <table style="width:100%;border-collapse:collapse;">
+                            <thead>
+                                <tr>
+                                    <th style="text-align:left;font-size:12px;color:var(--gray-400);font-weight:500;padding:8px 0;border-bottom:1px solid var(--gray-100);"></th>
+                                    <th style="text-align:right;font-size:12px;color:var(--gray-400);font-weight:500;padding:8px 0;border-bottom:1px solid var(--gray-100);">频率</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;border-bottom:1px solid var(--gray-50);">高频接口</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">120 次/分</td></tr>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;border-bottom:1px solid var(--gray-50);">中频接口</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;border-bottom:1px solid var(--gray-50);">60 次/分</td></tr>
+                                <tr><td style="font-size:13px;color:var(--gray-700);padding:10px 0;">低频接口</td><td style="text-align:right;font-size:13px;color:var(--gray-800);font-weight:500;padding:10px 0;">10 次/分</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 附加权限订阅 -->
+            <div class="info-card" style="margin-top:24px;">
+                <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                    <h2 class="info-section-title" style="margin-bottom:0;">附加权限订阅</h2>
+                    <span style="font-size:12px;color:var(--gray-500);padding:4px 12px;border:1px solid var(--gray-200);border-radius:4px;">未订阅</span>
+                </div>
+
+                <div class="empty-state" style="padding:40px 20px;border:1px dashed var(--gray-200);">
+                    <p class="empty-text">暂未订阅附加权限</p>
+                </div>
+            </div>
+        </div>
+
+            </div><!-- end tab-content-area -->
+        </div><!-- end content-layout -->
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal-overlay" onclick="if(event.target===this)closeModal()">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h2 class="modal-title">创建应用</h2>
+                <button class="modal-close" onclick="closeModal()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 应用名称 -->
+                <div class="form-group">
+                    <label class="form-label">应用名称</label>
+                    <input id="input-name" class="form-input" type="text" placeholder="例如：我的量化策略">
+                </div>
+
+                <!-- Client Secret -->
+                <div class="form-group">
+                    <label class="form-label">Client Secret</label>
+                    <div class="toggle-row">
+                        <div style="display:flex;align-items:center;gap:6px;">
+                            <span class="toggle-label">启用 Client Secret 进行身份验证</span>
+                            <span class="tooltip-trigger" data-tip="开启后，系统将为该应用生成一组 Client Secret 密钥。应用使用时需额外提供 Client Secret 进行双重身份验证，推荐用于部署在自有服务器上、能安全保管密钥的应用。">
+                                <svg style="width:14px;height:14px;color:var(--gray-400);cursor:help;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                            </span>
+                        </div>
+                        <div id="toggle-secret" class="toggle-switch" onclick="this.classList.toggle('on')"></div>
+                    </div>
+                </div>
+
+                <!-- CLI 登录 -->
+                <div class="form-group">
+                    <label class="form-label">CLI 登录</label>
+                    <div class="toggle-row">
+                        <div>
+                            <span class="toggle-label">启用命令行（CLI）登录</span>
+                            <p style="font-size:12px;color:var(--gray-400);margin-top:4px;">适用于无法直接使用浏览器完成授权的运行环境</p>
+                        </div>
+                        <div id="toggle-cli" class="toggle-switch on" onclick="this.classList.toggle('on')"></div>
+                    </div>
+                </div>
+
+                <!-- 授权有效期 -->
+                <div class="form-group">
+                    <label class="form-label">授权有效期</label>
+                    <div class="form-row-inline">
+                        <input class="form-input-number" type="number" value="15">
+                        <span class="form-unit">天</span>
+                    </div>
+                    <p class="form-helper">有效期到期后需重新授权</p>
+                </div>
+
+                <!-- 回调 URL -->
+                <div class="form-group">
+                    <div class="url-fields-header">
+                        <label class="form-label" style="margin-bottom:0">回调 URL（Redirect URI）<span class="optional">可选</span></label>
+                        <button class="btn-add-url" onclick="addUrlField()">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                            添加
+                        </button>
+                    </div>
+                    <div id="url-container">
+                        <div class="url-field-row">
+                            <input class="form-input mono" type="text" placeholder="http://localhost:60355/callback">
+                            <button class="btn-delete-url" onclick="removeUrlField(this)">
+                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="modal-footer">
+                    <button class="btn-cancel" onclick="closeModal()">取消</button>
+                    <button class="btn-submit" onclick="createApp()">创建应用</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Detail Modal -->
+    <div id="detail-modal" class="modal-overlay" style="z-index:1050;" onclick="if(event.target===this)closeDetail()">
+        <div class="modal-box" style="max-width:600px;">
+            <div class="modal-header">
+                <h2 class="modal-title" id="detail-title">我的量化策略</h2>
+                <button class="modal-close" onclick="closeDetail()">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!-- 基本信息 -->
+                <div style="margin-bottom:24px;">
+                    <h3 style="font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:14px;">基本信息</h3>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div style="display:flex;align-items:center;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">应用名称</span>
+                            <span id="detail-name" style="color:var(--gray-900);font-weight:500;">我的量化策略</span>
+                        </div>
+                        <div style="display:flex;align-items:center;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">Client ID</span>
+                            <span id="detail-client-id" style="color:var(--gray-900);font-family:'JetBrains Mono',monospace;font-size:12px;">cid_abc123xyz456</span>
+                            <button onclick="copyText('detail-client-id')" style="margin-left:8px;background:none;border:none;cursor:pointer;color:var(--blue-600);font-size:11px;font-family:inherit;">复制</button>
+                        </div>
+                        <div id="detail-secret-row" style="display:flex;align-items:center;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">Client Secret</span>
+                            <span id="detail-secret" style="color:var(--gray-900);font-family:'JetBrains Mono',monospace;font-size:12px;">••••••••••••</span>
+                            <button id="secret-eye-btn" onclick="toggleSecret()" style="margin-left:8px;background:none;border:none;cursor:pointer;color:var(--gray-400);display:flex;align-items:center;" title="点击查看">
+                                <svg id="eye-closed" style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
+                                <svg id="eye-open" style="width:16px;height:16px;display:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 应用配置 -->
+                <div style="margin-bottom:24px;padding-top:20px;border-top:1px solid var(--gray-100);">
+                    <h3 style="font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:14px;">应用配置</h3>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div style="display:flex;align-items:flex-start;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">权限范围</span>
+                            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+                                <span style="padding:2px 8px;background:#ecfdf5;border-radius:4px;font-size:11px;color:#065f46;">行情查看</span>
+                                <span style="padding:2px 8px;background:#ecfdf5;border-radius:4px;font-size:11px;color:#065f46;">信息查询</span>
+                                <span style="padding:2px 8px;background:#ecfdf5;border-radius:4px;font-size:11px;color:#065f46;">交易下单</span>
+                                <span style="padding:2px 8px;background:#ecfdf5;border-radius:4px;font-size:11px;color:#065f46;">资金划转</span>
+                            </div>
+                        </div>
+                        <div style="display:flex;align-items:flex-start;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">回调地址</span>
+                            <span id="detail-redirect" style="color:var(--gray-700);font-family:'JetBrains Mono',monospace;font-size:12px;">—</span>
+                        </div>
+                        <div style="display:flex;align-items:flex-start;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">可操作账户</span>
+                            <span id="detail-account" style="color:var(--gray-700);">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 授权有效期 -->
+                <div style="margin-bottom:24px;padding-top:20px;border-top:1px solid var(--gray-100);">
+                    <h3 style="font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:14px;">授权有效期</h3>
+                    <div style="display:flex;align-items:center;font-size:13px;">
+                        <span style="color:var(--gray-500);width:110px;flex-shrink:0;">有效期至</span>
+                        <span id="detail-expiry" style="color:var(--gray-900);">2026-08-06 14:30:00</span>
+                    </div>
+                </div>
+
+                <!-- 撤销授权 -->
+                <div id="detail-revoke-section" style="display:none;margin-bottom:24px;padding-top:20px;border-top:1px solid var(--gray-100);">
+                    <button onclick="confirmRevoke()" style="width:100%;padding:10px 0;font-size:13px;font-weight:600;color:#dc2626;background:#fef2f2;border:1px solid #fecaca;border-radius:8px;cursor:pointer;font-family:inherit;transition:all 0.15s;">撤销授权</button>
+                </div>
+
+                <!-- 授权状态 -->
+                <div style="margin-bottom:24px;padding-top:20px;border-top:1px solid var(--gray-100);">
+                    <h3 style="font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:14px;">授权状态</h3>
+                    <div style="display:flex;flex-direction:column;gap:10px;">
+                        <div style="display:flex;align-items:center;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">状态</span>
+                            <span id="detail-status-badge" style="display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:4px;font-size:12px;font-weight:500;background:var(--yellow-100);color:var(--yellow-800);">
+                                <span style="width:6px;height:6px;border-radius:50%;background:var(--yellow-800);"></span>
+                                未授权
+                            </span>
+                        </div>
+                        <div style="display:flex;align-items:center;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">最近授权时间</span>
+                            <span id="detail-last-auth-value" style="color:var(--gray-700);">—</span>
+                        </div>
+                        <div style="display:flex;align-items:center;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">最近访问时间</span>
+                            <span id="detail-last-access-value" style="color:var(--gray-700);">—</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 操作区 -->
+                <div style="display:flex;justify-content:flex-end;gap:10px;padding-top:20px;border-top:1px solid var(--gray-100);">
+                    <button class="btn-cancel" onclick="closeDetail()">关闭</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirm Dialog -->
+    <div id="confirm-dialog" class="modal-overlay" style="z-index:1200;" onclick="if(event.target===this)closeConfirm()">
+        <div class="modal-box" style="max-width:380px;">
+            <div class="modal-body" style="padding:28px 28px 24px;">
+                <h3 id="confirm-title" style="font-size:16px;font-weight:600;color:var(--gray-900);margin-bottom:10px;">确认删除</h3>
+                <p id="confirm-msg" style="font-size:13px;color:var(--gray-600);line-height:1.6;margin-bottom:24px;">删除后该应用将无法恢复，已授权的 token 将立即失效。确定要删除吗？</p>
+                <div style="display:flex;justify-content:flex-end;gap:10px;">
+                    <button class="btn-cancel" onclick="closeConfirm()">取消</button>
+                    <button id="confirm-btn" class="btn-cancel" style="color:#fff;background:#dc2626;border-color:#dc2626;" onclick="executeConfirm()">确认删除</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div id="toast" class="toast">应用创建成功</div>
+
+    <script>
+        // Tab switching
+        function switchTab(name) {
+            document.querySelectorAll('.tab-item').forEach(t => t.classList.remove('active'));
+            document.querySelector('[data-tab="' + name + '"]').classList.add('active');
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.getElementById('tab-' + name).classList.add('active');
+        }
+
+        // Modal
+        function openModal() {
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset form
+            document.getElementById('input-name').value = '';
+            document.getElementById('input-name').classList.remove('error');
+        }
+
+        // URL Fields
+        function addUrlField() {
+            var container = document.getElementById('url-container');
+            var row = document.createElement('div');
+            row.className = 'url-field-row';
+            row.innerHTML = '<input class="form-input mono" type="text" placeholder="https://your-app.com/callback"><button class="btn-delete-url" onclick="removeUrlField(this)"><svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>';
+            container.appendChild(row);
+        }
+
+        function removeUrlField(btn) {
+            btn.parentElement.remove();
+        }
+
+        // App storage - mock data
+        var apps = [
+            {
+                name: '量化交易策略',
+                clientId: 'cid_k8m2x9pqr4wn',
+                clientSecret: null,
+                hasSecret: false,
+                hasCli: true,
+                authorized: true,
+                createdAt: '2026-07-20',
+                expiryAt: '2026-08-04 14:30:00',
+                redirectUri: null
+            },
+            {
+                name: 'MCP Server 本地',
+                clientId: 'cid_f3j7t1nbc6ya',
+                clientSecret: 'sec_r9w2k4m8p1x5v7',
+                hasSecret: true,
+                hasCli: true,
+                authorized: true,
+                createdAt: '2026-07-15',
+                expiryAt: '2026-07-30 09:00:00',
+                redirectUri: 'http://localhost:60355/callback'
+            },
+            {
+                name: '行情监控脚本',
+                clientId: 'cid_q5z8v2d6h9le',
+                clientSecret: null,
+                hasSecret: false,
+                hasCli: true,
+                authorized: false,
+                createdAt: '2026-07-10',
+                expiryAt: '2026-07-25 16:00:00',
+                redirectUri: null
+            },
+            {
+                name: '旧版测试应用',
+                clientId: 'cid_a1b2c3d4e5f6',
+                clientSecret: null,
+                hasSecret: false,
+                hasCli: false,
+                authorized: false,
+                expired: true,
+                createdAt: '2026-06-01',
+                expiryAt: '2026-06-16 10:00:00',
+                redirectUri: 'http://localhost:3000/callback'
+            }
+        ];
+
+        // Create App
+        function createApp() {
+            var nameInput = document.getElementById('input-name');
+            var name = nameInput.value.trim();
+            if (!name) {
+                nameInput.classList.add('error');
+                nameInput.focus();
+                return;
+            }
+            nameInput.classList.remove('error');
+
+            var clientId = 'cid_' + Math.random().toString(36).substr(2, 12);
+            var hasSecret = document.getElementById('toggle-secret').classList.contains('on');
+            var hasCli = document.getElementById('toggle-cli').classList.contains('on');
+            var now = new Date();
+            var dateStr = now.getFullYear() + '-' + String(now.getMonth() + 1).padStart(2, '0') + '-' + String(now.getDate()).padStart(2, '0');
+            var expiryDate = new Date(now.getTime() + 15 * 24 * 60 * 60 * 1000);
+            var expiryStr = expiryDate.getFullYear() + '-' + String(expiryDate.getMonth() + 1).padStart(2, '0') + '-' + String(expiryDate.getDate()).padStart(2, '0') + ' ' + String(expiryDate.getHours()).padStart(2, '0') + ':' + String(expiryDate.getMinutes()).padStart(2, '0') + ':00';
+
+            var app = {
+                name: name,
+                clientId: clientId,
+                clientSecret: hasSecret ? 'sec_' + Math.random().toString(36).substr(2, 16) : null,
+                hasCli: hasCli,
+                hasSecret: hasSecret,
+                authorized: false,
+                createdAt: dateStr,
+                expiryAt: expiryStr,
+                redirectUri: null
+            };
+            apps.push(app);
+
+            renderAppTable();
+            closeModal();
+
+            var toast = document.getElementById('toast');
+            toast.textContent = '应用创建成功';
+            toast.style.background = 'var(--green-600)';
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 2500);
+        }
+
+        function renderAppTable() {
+            var tbody = document.getElementById('app-tbody');
+            tbody.innerHTML = '';
+            if (apps.length === 0) {
+                document.getElementById('empty-state').style.display = '';
+                document.getElementById('app-table').style.display = 'none';
+                return;
+            }
+            document.getElementById('empty-state').style.display = 'none';
+            document.getElementById('app-table').style.display = 'block';
+
+            // Sort by creation date descending (newest first)
+            var sorted = apps.map(function(app, idx) { return { app: app, idx: idx }; });
+            sorted.sort(function(a, b) { return b.app.createdAt.localeCompare(a.app.createdAt); });
+
+            sorted.forEach(function(item) {
+                var app = item.app;
+                var idx = item.idx;
+                var tr = document.createElement('tr');
+
+                // Check if expired
+                var isExpired = app.expired || new Date(app.expiryAt) < new Date();
+
+                var statusHtml;
+                if (app.authorized && !isExpired) {
+                    statusHtml = '<span class="status-badge" style="background:#ecfdf5;color:#065f46;">已授权</span>';
+                } else if (isExpired) {
+                    statusHtml = '<span class="status-badge" style="background:#fef2f2;color:#991b1b;">已过期</span>';
+                } else {
+                    statusHtml = '<span class="status-badge">未授权</span>';
+                }
+
+                // Show delete only for unauthorized and expired
+                var canDelete = !app.authorized || isExpired;
+                var deleteHtml = canDelete
+                    ? '<a class="table-link" style="color:#dc2626;margin-left:12px;" onclick="currentAppIdx=' + idx + ';confirmDelete()">删除</a>'
+                    : '';
+
+                tr.innerHTML = '<td><span class="app-name">' + app.name + '</span></td><td><span class="client-id">' + app.clientId + '</span></td><td>' + statusHtml + '</td><td>' + app.createdAt + '</td><td><a class="table-link" onclick="openDetail(' + idx + ')">详情</a>' + deleteHtml + '</td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        // Detail
+        var currentAppIdx = -1;
+
+        function openDetail(idx) {
+            currentAppIdx = idx;
+            var app = apps[idx];
+            document.getElementById('detail-title').textContent = app.name;
+            document.getElementById('detail-name').textContent = app.name;
+            document.getElementById('detail-client-id').textContent = app.clientId;
+
+            // Secret
+            var secretRow = document.getElementById('detail-secret-row');
+            if (app.hasSecret) {
+                secretRow.style.display = 'flex';
+                document.getElementById('detail-secret').textContent = '••••••••••••';
+                document.getElementById('detail-secret').dataset.value = app.clientSecret;
+            } else {
+                secretRow.style.display = 'none';
+            }
+
+            // Redirect
+            document.getElementById('detail-redirect').textContent = app.redirectUri || '—';
+
+
+            // Status
+            var statusBadge = document.getElementById('detail-status-badge');
+            var revokeSection = document.getElementById('detail-revoke-section');
+
+            var isExpired = app.expired || new Date(app.expiryAt) < new Date();
+
+            // 可操作账户
+            var detailAccount = document.getElementById('detail-account');
+            if (app.authorized && !isExpired) {
+                detailAccount.textContent = '****8832（实盘）';
+            } else {
+                detailAccount.textContent = '—';
+            }
+
+            // 授权有效期
+            var detailExpiry = document.getElementById('detail-expiry');
+            if (app.authorized) {
+                detailExpiry.textContent = app.expiryAt;
+            } else {
+                detailExpiry.textContent = '—';
+            }
+
+            var lastAuthValue = document.getElementById('detail-last-auth-value');
+            var lastAccessValue = document.getElementById('detail-last-access-value');
+
+            if (app.authorized && !isExpired) {
+                statusBadge.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#065f46;"></span>已授权';
+                statusBadge.style.background = '#ecfdf5';
+                statusBadge.style.color = '#065f46';
+                lastAuthValue.textContent = '2026-07-20 14:30:00';
+                lastAccessValue.textContent = '2026-07-22 09:15:00';
+                revokeSection.style.display = '';
+            } else if (isExpired) {
+                statusBadge.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#991b1b;"></span>已过期';
+                statusBadge.style.background = '#fef2f2';
+                statusBadge.style.color = '#991b1b';
+                lastAuthValue.textContent = '2026-06-01 10:00:00';
+                lastAccessValue.textContent = '2026-06-10 08:30:00';
+                revokeSection.style.display = 'none';
+            } else {
+                statusBadge.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:var(--yellow-800);"></span>未授权';
+                statusBadge.style.background = 'var(--yellow-100)';
+                statusBadge.style.color = 'var(--yellow-800)';
+                lastAuthValue.textContent = '—';
+                lastAccessValue.textContent = '—';
+                revokeSection.style.display = 'none';
+            }
+
+            document.getElementById('detail-modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeDetail() {
+            document.getElementById('detail-modal').classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        function copyText(id) {
+            var text = document.getElementById(id).textContent;
+            navigator.clipboard.writeText(text);
+            var toast = document.getElementById('toast');
+            toast.textContent = '已复制';
+            toast.style.background = 'var(--gray-800)';
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 1500);
+        }
+
+        function toggleSecret() {
+            var el = document.getElementById('detail-secret');
+            var eyeClosed = document.getElementById('eye-closed');
+            var eyeOpen = document.getElementById('eye-open');
+            if (el.textContent === '••••••••••••') {
+                el.textContent = el.dataset.value;
+                eyeClosed.style.display = 'none';
+                eyeOpen.style.display = '';
+            } else {
+                el.textContent = '••••••••••••';
+                eyeClosed.style.display = '';
+                eyeOpen.style.display = 'none';
+            }
+        }
+
+        // Confirm actions
+        var confirmAction = null;
+
+        function confirmRevoke() {
+            document.getElementById('confirm-title').textContent = '撤销授权';
+            document.getElementById('confirm-msg').textContent = '撤销授权后，该应用将无法继续访问您的账户，如需再次使用需重新完成授权。确认撤销？';
+            document.getElementById('confirm-btn').textContent = '确认';
+            document.getElementById('confirm-btn').style.background = '#dc2626';
+            document.getElementById('confirm-btn').style.borderColor = '#dc2626';
+            confirmAction = 'revoke';
+            document.getElementById('confirm-dialog').classList.add('active');
+        }
+
+        function confirmDelete() {
+            document.getElementById('confirm-title').textContent = '删除应用';
+            document.getElementById('confirm-msg').textContent = '删除后该应用将无法恢复，确认删除？';
+            document.getElementById('confirm-btn').textContent = '确认删除';
+            document.getElementById('confirm-btn').style.background = '#dc2626';
+            document.getElementById('confirm-btn').style.borderColor = '#dc2626';
+            confirmAction = 'delete';
+            document.getElementById('confirm-dialog').classList.add('active');
+        }
+
+        function closeConfirm() {
+            document.getElementById('confirm-dialog').classList.remove('active');
+            confirmAction = null;
+        }
+
+        function executeConfirm() {
+            if (confirmAction === 'revoke' && currentAppIdx >= 0) {
+                apps[currentAppIdx].authorized = false;
+                closeConfirm();
+                closeDetail();
+                renderAppTable();
+                showToast('已撤销授权', 'var(--gray-800)');
+            } else if (confirmAction === 'delete' && currentAppIdx >= 0) {
+                apps.splice(currentAppIdx, 1);
+                closeConfirm();
+                closeDetail();
+                renderAppTable();
+                showToast('应用已删除', '#dc2626');
+            }
+        }
+
+        function showToast(msg, bg) {
+            var toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.style.background = bg;
+            toast.classList.add('show');
+            setTimeout(function() { toast.classList.remove('show'); }, 2500);
+        }
+
+        // Init on page load
+        renderAppTable();
+    </script>
+</body>
+</html>
