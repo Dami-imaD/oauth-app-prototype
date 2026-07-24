@@ -790,9 +790,8 @@
         <div class="modal-box">
             <div class="modal-icon"></div>
             <div class="modal-title">设备授权</div>
-            <div class="modal-desc">请输入终端中显示的 8 位设备码</div>
-            <div class="modal-hint">设备码有效期 15 分钟，仅可使用一次</div>
-            <div id="code-error" style="display:none;background:var(--red-50);border:1px solid #fecaca;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:none;align-items:center;gap:8px;">
+            <div class="modal-desc">请确保授权码与您终端中显示的一致</div>
+                        <div id="code-error" style="display:none;background:var(--red-50);border:1px solid #fecaca;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:none;align-items:center;gap:8px;">
                 <span style="width:18px;height:18px;background:var(--red-500);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><svg style="width:10px;height:10px;" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg></span>
                 <span style="font-size:12px;color:var(--red-500);">授权未成功，错误码：<code id="code-error-msg" style="background:var(--gray-100);padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray-700);">expired_token</code></span>
             </div>
