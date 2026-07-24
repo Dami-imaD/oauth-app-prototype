@@ -1,0 +1,1043 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>授权 - 老虎证券</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --yellow: #FFCC00;
+            --yellow-hover: #e6b800;
+            --yellow-light: #fff9e0;
+            --dark: #1a1a2e;
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            --red-500: #ef4444;
+            --red-50: #fef2f2;
+            --green-500: #22c55e;
+            --green-50: #f0fdf4;
+            --blue-600: #2563eb;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Noto Sans SC', -apple-system, sans-serif;
+            background: var(--gray-100);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* Pages */
+        .page { display: none; width: 100%; max-width: 480px; }
+        .page.active { display: block; animation: fadeIn 0.3s ease; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-4px); }
+            75% { transform: translateX(4px); }
+        }
+
+        /* Card */
+        .card {
+            background: #fff;
+            border-radius: 16px;
+            box-shadow: 0 4px 24px rgba(0,0,0,0.06), 0 1px 4px rgba(0,0,0,0.04);
+            padding: 40px 36px;
+        }
+
+        .card-narrow { max-width: 420px; margin: 0 auto; }
+
+        /* Login Page */
+        .login-logo {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .login-logo-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--yellow);
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: 800;
+            color: var(--dark);
+            margin-bottom: 8px;
+        }
+
+        .login-logo-text {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        .form-label {
+            font-size: 13px;
+            color: var(--gray-700);
+            margin-bottom: 6px;
+            display: block;
+        }
+
+        .form-group { margin-bottom: 16px; }
+
+        .phone-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .phone-code {
+            width: 72px;
+            padding: 10px 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--gray-800);
+            outline: none;
+            background: #fff;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 10px 14px;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--gray-800);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .form-input:focus { border-color: var(--yellow); }
+        .form-input::placeholder { color: var(--gray-300); }
+
+        .sms-row {
+            display: flex;
+            gap: 8px;
+        }
+
+        .sms-row .form-input { flex: 1; }
+
+        .sms-btn {
+            white-space: nowrap;
+            padding: 10px 14px;
+            background: none;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 13px;
+            color: var(--blue-600);
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.15s;
+        }
+
+        .sms-btn:hover { background: var(--gray-50); }
+
+        .login-tabs {
+            display: flex;
+            justify-content: center;
+            gap: 24px;
+            margin-bottom: 20px;
+        }
+
+        .login-tab {
+            font-size: 13px;
+            color: var(--blue-600);
+            cursor: pointer;
+            text-decoration: none;
+            padding-bottom: 2px;
+        }
+
+        .login-tab.active {
+            color: var(--gray-900);
+            font-weight: 500;
+            border-bottom: 1px solid var(--gray-900);
+        }
+
+        .btn-primary {
+            width: 100%;
+            padding: 12px;
+            background: var(--yellow);
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--gray-900);
+            cursor: pointer;
+            font-family: inherit;
+            transition: background 0.15s;
+            margin-top: 8px;
+        }
+
+        .btn-primary:hover { background: var(--yellow-hover); }
+
+        .btn-secondary {
+            width: 100%;
+            padding: 12px;
+            background: #fff;
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--gray-700);
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.15s;
+            margin-top: 10px;
+        }
+
+        .btn-secondary:hover { background: var(--gray-50); }
+
+        .login-footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: var(--gray-400);
+            line-height: 1.6;
+        }
+
+        .login-footer a {
+            color: var(--blue-600);
+            text-decoration: none;
+        }
+
+        /* Auth Page Header */
+        .auth-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .auth-icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 14px;
+        }
+
+        .auth-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 16px;
+            color: #fff;
+        }
+
+        .auth-icon-app { background: linear-gradient(135deg, #ff6b35, #f7931e); }
+        .auth-icon-tiger { background: var(--yellow); color: var(--dark); }
+
+        .auth-icons-x {
+            font-size: 14px;
+            color: var(--gray-400);
+            font-weight: 500;
+        }
+
+        .auth-app-name {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 4px;
+        }
+
+        .auth-subtitle {
+            font-size: 14px;
+            color: var(--gray-500);
+        }
+
+        /* Section */
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 10px;
+        }
+
+        .info-banner {
+            background: var(--yellow-light);
+            border-radius: 8px;
+            padding: 10px 14px;
+            font-size: 12px;
+            color: var(--gray-700);
+            line-height: 1.5;
+            margin-bottom: 14px;
+        }
+
+        /* Radio Cards */
+        .radio-card {
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+        }
+
+        .radio-card:hover { border-color: var(--gray-300); }
+
+        .radio-card.selected {
+            border-color: var(--yellow);
+            background: #fffdf5;
+        }
+
+        .radio-dot {
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid var(--gray-300);
+            flex-shrink: 0;
+            margin-top: 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .radio-card.selected .radio-dot {
+            border-color: var(--gray-900);
+        }
+
+        .radio-card.selected .radio-dot::after {
+            content: '';
+            width: 8px;
+            height: 8px;
+            background: var(--gray-900);
+            border-radius: 50%;
+        }
+
+        .radio-card-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--gray-900);
+        }
+
+        .radio-card-desc {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 2px;
+        }
+
+        /* Scope Checkboxes */
+        .scope-section { margin-top: 24px; margin-bottom: 24px; }
+
+        .scope-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--gray-100);
+        }
+
+        .scope-item:last-child { border-bottom: none; }
+
+        .scope-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid var(--gray-300);
+            border-radius: 4px;
+            flex-shrink: 0;
+            margin-top: 2px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.15s;
+        }
+
+        .scope-checkbox.checked {
+            background: var(--gray-900);
+            border-color: var(--gray-900);
+        }
+
+        .scope-checkbox.checked::after {
+            content: '';
+            width: 10px;
+            height: 6px;
+            border-left: 2px solid #fff;
+            border-bottom: 2px solid #fff;
+            transform: rotate(-45deg) translateY(-1px);
+        }
+
+        .scope-info { flex: 1; }
+
+        .scope-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .scope-desc {
+            font-size: 12px;
+            color: var(--gray-500);
+            margin-top: 2px;
+            line-height: 1.4;
+        }
+
+        .risk-tag {
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--red-500);
+            background: var(--red-50);
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        .auth-footer-text {
+            font-size: 11px;
+            color: var(--gray-400);
+            text-align: center;
+            margin-top: 16px;
+            line-height: 1.5;
+        }
+
+        /* Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.2s;
+            padding: 20px;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-box {
+            background: #fff;
+            border-radius: 16px;
+            padding: 36px 32px;
+            width: 100%;
+            max-width: 380px;
+            text-align: center;
+            box-shadow: 0 25px 60px rgba(0,0,0,0.25);
+            transform: scale(0.95);
+            transition: transform 0.2s cubic-bezier(0.4,0,0.2,1);
+        }
+
+        .modal-overlay.active .modal-box {
+            transform: scale(1);
+        }
+
+        .modal-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--yellow);
+            border-radius: 10px;
+            margin: 0 auto 16px;
+        }
+
+        .modal-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .modal-desc {
+            font-size: 13px;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .modal-hint {
+            font-size: 12px;
+            color: var(--gray-400);
+            margin-bottom: 24px;
+        }
+
+        /* Code Input */
+        .code-inputs {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            margin-bottom: 24px;
+        }
+
+        .code-input {
+            width: 38px;
+            height: 44px;
+            border: 1.5px solid var(--gray-200);
+            border-radius: 8px;
+            text-align: center;
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 18px;
+            font-weight: 500;
+            color: var(--gray-900);
+            outline: none;
+            transition: border-color 0.15s;
+        }
+
+        .code-input:focus { border-color: var(--yellow); }
+
+        .code-dash {
+            font-size: 16px;
+            color: var(--gray-400);
+            margin: 0 2px;
+        }
+
+        /* Password Modal */
+        .password-section {
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .password-section .form-label {
+            margin-bottom: 8px;
+        }
+
+        /* Result Pages */
+        .result-icon {
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            margin: 0 auto 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .result-icon-success {
+            background: var(--green-50);
+        }
+
+        .result-icon-success svg { width: 28px; height: 28px; stroke: var(--green-500); }
+
+        .result-icon-error {
+            background: var(--red-50);
+        }
+
+        .result-icon-error svg { width: 28px; height: 28px; stroke: var(--red-500); }
+
+        .result-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: 8px;
+        }
+
+        .result-msg {
+            font-size: 14px;
+            color: var(--gray-500);
+            margin-bottom: 28px;
+            line-height: 1.5;
+        }
+
+        /* Demo link */
+        .demo-link {
+            position: fixed;
+            bottom: 16px;
+            right: 16px;
+            font-size: 11px;
+            color: var(--gray-400);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Page 1: Login -->
+    <div id="page-login" class="page active">
+        <div class="card card-narrow">
+            <div class="login-logo">
+                <div class="login-logo-icon">T</div>
+                <div class="login-logo-text">老虎證券</div>
+            </div>
+
+            <!-- 手机登录（默认：密码） -->
+            <div id="login-phone">
+                <div class="form-group">
+                    <label class="form-label">手机号码</label>
+                    <div class="phone-row">
+                        <select class="phone-code">
+                            <option>+65</option>
+                            <option>+86</option>
+                            <option>+852</option>
+                            <option>+1</option>
+                        </select>
+                        <input class="form-input" type="tel" placeholder="请输入手机号码">
+                    </div>
+                </div>
+                <div id="phone-pwd-field" class="form-group">
+                    <label class="form-label">登录密码</label>
+                    <input class="form-input" type="password" placeholder="请输入密码">
+                </div>
+                <div id="phone-sms-field" class="form-group" style="display:none;">
+                    <label class="form-label">短信验证码</label>
+                    <div class="sms-row">
+                        <input class="form-input" type="text" placeholder="短信验证码">
+                        <button class="sms-btn">发送短信验证码</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 邮箱登录 -->
+            <div id="login-email" style="display:none;">
+                <div class="form-group">
+                    <label class="form-label">邮箱地址</label>
+                    <input class="form-input" type="email" placeholder="请输入邮箱地址">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">登录密码</label>
+                    <input class="form-input" type="password" placeholder="请输入密码">
+                </div>
+            </div>
+
+            <button class="btn-primary" onclick="goTo('page-auth')">登录</button>
+
+            <!-- 手机模式下的切换链接 -->
+            <div id="switch-links-phone" style="text-align:center;margin-top:16px;">
+                <a class="login-tab" style="font-size:13px;" onclick="switchLoginTab('email', this)">邮箱登录</a>
+                <span style="color:var(--gray-300);margin:0 8px;">|</span>
+                <a class="login-tab" style="font-size:13px;" onclick="switchPhoneMode('sms')">验证码登录</a>
+            </div>
+
+            <!-- 手机验证码模式下的切换链接 -->
+            <div id="switch-links-phone-sms" style="text-align:center;margin-top:16px;display:none;">
+                <a class="login-tab" style="font-size:13px;" onclick="switchLoginTab('email', this)">邮箱登录</a>
+                <span style="color:var(--gray-300);margin:0 8px;">|</span>
+                <a class="login-tab" style="font-size:13px;" onclick="switchPhoneMode('pwd')">密码登录</a>
+            </div>
+
+            <!-- 邮箱模式下的切换链接 -->
+            <div id="switch-links-email" style="text-align:center;margin-top:16px;display:none;">
+                <a class="login-tab" style="font-size:13px;" onclick="switchLoginTab('phone')">手机登录</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Page 2: Authorization -->
+    <div id="page-auth" class="page">
+        <div class="card">
+            <div class="auth-header">
+                <div class="auth-icons">
+                    <div class="auth-icon auth-icon-app">Q</div>
+                    <span class="auth-icons-x">×</span>
+                    <div class="auth-icon auth-icon-tiger">T</div>
+                </div>
+                <div class="auth-app-name">My Quant Strategy</div>
+                <div class="auth-subtitle">申请访问您的老虎账号</div>
+            </div>
+
+            <!-- Step 1 -->
+            <div class="section-title">选择授权账户类型</div>
+            <div class="info-banner">一次授权仅支持一种账户类型。如需同时访问模拟盘账户和实盘账户，请分别发起两次授权。</div>
+
+            <div class="radio-card selected" onclick="selectAccount(this, 'demo')">
+                <div class="radio-dot"></div>
+                <div>
+                    <div class="radio-card-title">模拟盘账户 <span style="font-weight:400;color:var(--gray-400);font-size:12px;margin-left:4px;">****6601</span></div>
+                    <div class="radio-card-desc">使用虚拟资金进行模拟交易，不涉及真实资金或资产</div>
+                </div>
+            </div>
+            <div class="radio-card" onclick="selectAccount(this, 'live')">
+                <div class="radio-dot"></div>
+                <div>
+                    <div class="radio-card-title">实盘账户 <span style="font-weight:400;color:var(--gray-400);font-size:12px;margin-left:4px;">****8832</span></div>
+                    <div class="radio-card-desc">使用真实资金进行交易。授权后，应用将按照您授予的权限访问和操作您的实盘账户。</div>
+                </div>
+            </div>
+
+            <!-- Step 2 -->
+            <div class="scope-section">
+                <div class="section-title">勾选授权范围</div>
+
+                <div class="scope-item">
+                    <div class="scope-checkbox" onclick="toggleScope(this)"></div>
+                    <div class="scope-info">
+                        <div class="scope-name">行情数据</div>
+                        <div class="scope-desc">获取股票、期权、期货等产品的实时行情、历史行情及行情订阅推送</div>
+                    </div>
+                </div>
+
+                <div class="scope-item">
+                    <div class="scope-checkbox" onclick="toggleScope(this)"></div>
+                    <div class="scope-info">
+                        <div class="scope-name">账户信息</div>
+                        <div class="scope-desc">查询账户资金、持仓、出入金及转股记录</div>
+                    </div>
+                </div>
+
+                <div class="scope-item">
+                    <div class="scope-checkbox" data-risk="high" onclick="toggleScope(this)"></div>
+                    <div class="scope-info">
+                        <div class="scope-name">交易服务 <span class="risk-tag risk-tag-live" style="display:none;">交易密码</span></div>
+                        <div class="scope-desc">下单、订单管理（改单、撤单）、期权行权，以及订单和成交查询</div>
+                    </div>
+                </div>
+
+                <div class="scope-item">
+                    <div class="scope-checkbox" data-risk="high" onclick="toggleScope(this)"></div>
+                    <div class="scope-info">
+                        <div class="scope-name">资金服务 <span class="risk-tag risk-tag-live" style="display:none;">交易密码</span></div>
+                        <div class="scope-desc">内部资金转账</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 授权协议 -->
+            <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+                <div id="agreement-check" class="scope-checkbox" onclick="toggleScope(this);document.getElementById('agreement-hint').style.display='none';" style="margin-top:1px;"></div>
+                <span style="font-size:12px;color:var(--gray-600);line-height:1.5;">我已阅读并同意 <a href="#" style="color:var(--blue-600);text-decoration:none;">《用户数据授权协议》</a></span>
+            </div>
+            <div id="agreement-hint" style="display:none;padding-left:26px;font-size:12px;color:var(--red-500);margin-bottom:6px;">请先勾选同意授权协议</div>
+            <div style="margin-bottom:16px;padding-left:26px;font-size:11px;color:var(--gray-400);line-height:1.5;">本授权仅限于您所选择的权限范围，平台不对第三方应用的行为承担责任。</div>
+
+            <button class="btn-primary" onclick="handleAuthorize()">授权</button>
+            <button class="btn-secondary" onclick="goTo('page-login')">取消</button>
+        </div>
+    </div>
+
+    <!-- Page 4: Success -->
+    <div id="page-success" class="page">
+        <div class="card card-narrow">
+            <div style="text-align:center;">
+                <div class="result-icon result-icon-success">
+                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
+                </div>
+                <div class="result-title">授权成功</div>
+                <div class="result-msg" style="margin-bottom:24px;">您已成功授权 My Quant Strategy 访问您的老虎账户，您可前往开发者平台查看授权详情</div>
+            </div>
+
+            <div style="border-top:1px solid var(--gray-100);padding-top:16px;">
+                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                    <span style="font-size:13px;color:var(--gray-500);">授权账户</span>
+                    <span id="success-account" style="font-size:13px;color:var(--gray-900);font-weight:500;">模拟盘账户 (****6601)</span>
+                </div>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                    <span style="font-size:13px;color:var(--gray-500);flex-shrink:0;">授权权限</span>
+                    <div id="success-scopes" style="text-align:right;font-size:13px;color:var(--gray-900);font-weight:500;line-height:1.8;"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;padding:10px 0;">
+                    <span style="font-size:13px;color:var(--gray-500);">到期时间</span>
+                    <span id="success-expiry" style="font-size:13px;color:var(--gray-900);font-weight:500;">2026-08-08 14:30:00</span>
+                </div>
+            </div>
+
+            <button class="btn-primary" style="margin-top:24px;" onclick="goTo('page-login')">查看授权</button>
+        </div>
+    </div>
+
+    <!-- Page 5: Error -->
+    <div id="page-error" class="page">
+        <div class="card card-narrow" style="text-align:center;">
+            <div class="result-icon result-icon-error">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M6 18L18 6M6 6l12 12"/></svg>
+            </div>
+            <div class="result-title">授权失败</div>
+            <div class="result-msg">设备码无效或已过期，请返回重试。</div>
+            <button class="btn-primary" onclick="goTo('page-auth')">返回重试</button>
+        </div>
+    </div>
+
+    <!-- Modal: Device Code -->
+    <div id="modal-code" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-code')">
+        <div class="modal-box">
+            <div class="modal-icon"></div>
+            <div class="modal-title">设备授权</div>
+            <div class="modal-desc">请输入终端中显示的 8 位设备码</div>
+            <div class="modal-hint">设备码有效期 15 分钟，仅可使用一次</div>
+            <div id="code-error" style="display:none;background:var(--red-50);border:1px solid #fecaca;border-radius:8px;padding:10px 14px;margin-bottom:16px;display:none;align-items:center;gap:8px;">
+                <span style="width:18px;height:18px;background:var(--red-500);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><svg style="width:10px;height:10px;" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg></span>
+                <span style="font-size:12px;color:var(--red-500);">授权未成功，错误码：<code id="code-error-msg" style="background:var(--gray-100);padding:1px 6px;border-radius:3px;font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--gray-700);">expired_token</code></span>
+            </div>
+            <div class="code-inputs">
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+                <span class="code-dash">—</span>
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+                <input class="code-input device-code-digit" maxlength="1" oninput="codeNext(this)" onfocus="clearCodeError()">
+            </div>
+            <button class="btn-primary" onclick="submitCode()">授权</button>
+            <button class="btn-secondary" onclick="closeModal('modal-code')">取消</button>
+        </div>
+    </div>
+
+    <!-- Modal: Password -->
+    <div id="modal-password" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-password')">
+        <div class="modal-box" style="max-width:360px;padding:28px 24px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                <div class="modal-title" style="margin-bottom:0;font-size:16px;">验证交易密码</div>
+                <button onclick="closeModal('modal-password')" style="background:none;border:none;cursor:pointer;color:var(--gray-400);font-size:18px;">✕</button>
+            </div>
+            <div style="margin-bottom:12px;">
+                <span style="font-size:13px;color:var(--gray-600);">请输入交易密码</span>
+            </div>
+            <div id="pwd-inputs" class="code-inputs" style="justify-content:flex-start;gap:8px;margin-bottom:6px;">
+                <input class="code-input pwd-digit" type="password" maxlength="1" style="width:40px;height:46px;" oninput="codeNext(this)" onfocus="clearPwdError()">
+                <input class="code-input pwd-digit" type="password" maxlength="1" style="width:40px;height:46px;" oninput="codeNext(this)" onfocus="clearPwdError()">
+                <input class="code-input pwd-digit" type="password" maxlength="1" style="width:40px;height:46px;" oninput="codeNext(this)" onfocus="clearPwdError()">
+                <input class="code-input pwd-digit" type="password" maxlength="1" style="width:40px;height:46px;" oninput="codeNext(this)" onfocus="clearPwdError()">
+                <input class="code-input pwd-digit" type="password" maxlength="1" style="width:40px;height:46px;" oninput="codeNext(this)" onfocus="clearPwdError()">
+                <input class="code-input pwd-digit" type="password" maxlength="1" style="width:40px;height:46px;" oninput="codeNext(this)" onfocus="clearPwdError()">
+            </div>
+            <div id="pwd-error" style="display:none;font-size:12px;color:var(--red-500);margin-bottom:14px;">交易密码错误，请重新输入</div>
+            <div style="display:flex;justify-content:flex-end;gap:10px;margin-top:14px;">
+                <button class="btn-secondary" style="width:auto;padding:8px 20px;margin-top:0;" onclick="closeModal('modal-password')">取消</button>
+                <button class="btn-primary" style="width:auto;padding:8px 20px;margin-top:0;font-size:13px;" onclick="verifyPassword()">确认</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Demo link -->
+    <span class="demo-link" onclick="goTo('page-error')">模拟失败页</span>
+
+    <script>
+        var selectedAccount = 'demo';
+
+        function switchLoginTab(type) {
+            if (type === 'phone') {
+                document.getElementById('login-phone').style.display = '';
+                document.getElementById('login-email').style.display = 'none';
+                document.getElementById('switch-links-phone').style.display = '';
+                document.getElementById('switch-links-phone-sms').style.display = 'none';
+                document.getElementById('switch-links-email').style.display = 'none';
+                // Reset to password mode
+                document.getElementById('phone-pwd-field').style.display = '';
+                document.getElementById('phone-sms-field').style.display = 'none';
+            } else {
+                document.getElementById('login-phone').style.display = 'none';
+                document.getElementById('login-email').style.display = '';
+                document.getElementById('switch-links-phone').style.display = 'none';
+                document.getElementById('switch-links-phone-sms').style.display = 'none';
+                document.getElementById('switch-links-email').style.display = '';
+            }
+        }
+
+        function switchPhoneMode(mode) {
+            if (mode === 'sms') {
+                document.getElementById('phone-sms-field').style.display = '';
+                document.getElementById('phone-pwd-field').style.display = 'none';
+                document.getElementById('switch-links-phone').style.display = 'none';
+                document.getElementById('switch-links-phone-sms').style.display = '';
+            } else {
+                document.getElementById('phone-sms-field').style.display = 'none';
+                document.getElementById('phone-pwd-field').style.display = '';
+                document.getElementById('switch-links-phone').style.display = '';
+                document.getElementById('switch-links-phone-sms').style.display = 'none';
+            }
+        }
+
+        function goTo(pageId) {
+            document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+            document.getElementById(pageId).classList.add('active');
+        }
+
+        function selectAccount(card, type) {
+            selectedAccount = type;
+            document.querySelectorAll('.radio-card').forEach(function(c) { c.classList.remove('selected'); });
+            card.classList.add('selected');
+
+            // Show/hide 交易密码 tags
+            var tags = document.querySelectorAll('.risk-tag-live');
+            tags.forEach(function(tag) {
+                tag.style.display = type === 'live' ? 'inline-block' : 'none';
+            });
+        }
+
+        function toggleScope(el) {
+            el.classList.toggle('checked');
+        }
+
+        var pendingCheckbox = null;
+        var passwordVerified = false;
+
+        function verifyPassword() {
+            var digits = document.querySelectorAll('.pwd-digit');
+            var pwd = '';
+            digits.forEach(function(d) { pwd += d.value; });
+
+            if (pwd.length < 6) {
+                // Not enough digits
+                document.getElementById('pwd-error').textContent = '请输入完整的 6 位交易密码';
+                document.getElementById('pwd-error').style.display = '';
+                digits.forEach(function(d) {
+                    if (!d.value) d.style.borderColor = 'var(--red-500)';
+                });
+                return;
+            }
+
+            if (pwd === '123456') {
+                // Success
+                passwordVerified = true;
+                closeModal('modal-password');
+                // Clear inputs
+                digits.forEach(function(d) { d.value = ''; });
+                document.getElementById('pwd-error').style.display = 'none';
+                // Open device code modal
+                openModal('modal-code');
+            } else {
+                // Error
+                document.getElementById('pwd-error').textContent = '交易密码错误，请重新输入';
+                document.getElementById('pwd-error').style.display = '';
+                digits.forEach(function(d) {
+                    d.value = '';
+                    d.style.borderColor = 'var(--red-500)';
+                });
+                digits[0].focus();
+            }
+        }
+
+        function clearPwdError() {
+            document.getElementById('pwd-error').style.display = 'none';
+            document.querySelectorAll('.pwd-digit').forEach(function(d) {
+                d.style.borderColor = '';
+            });
+        }
+
+        function handleAuthorize() {
+            // Check agreement
+            var agreementCheck = document.getElementById('agreement-check');
+            if (!agreementCheck.classList.contains('checked')) {
+                var agreementRow = agreementCheck.parentElement;
+                agreementRow.style.animation = 'none';
+                agreementRow.offsetHeight; // trigger reflow
+                agreementRow.style.animation = 'shake 0.3s ease';
+                agreementCheck.style.borderColor = 'var(--red-500)';
+                document.getElementById('agreement-hint').style.display = '';
+                setTimeout(function() { agreementCheck.style.borderColor = ''; }, 2000);
+                return;
+            }
+            document.getElementById('agreement-hint').style.display = 'none';
+
+            var isLive = selectedAccount === 'live';
+            var highRiskChecked = false;
+            document.querySelectorAll('.scope-checkbox[data-risk="high"]').forEach(function(cb) {
+                if (cb.classList.contains('checked')) highRiskChecked = true;
+            });
+
+            if (isLive && highRiskChecked) {
+                openModal('modal-password');
+            } else {
+                openModal('modal-code');
+            }
+        }
+
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function codeNext(el) {
+            if (el.value.length === 1) {
+                var next = el.nextElementSibling;
+                if (next && next.classList.contains('code-dash')) next = next.nextElementSibling;
+                if (next && next.classList.contains('code-input')) next.focus();
+            }
+        }
+
+        function submitCode() {
+            var digits = document.querySelectorAll('.device-code-digit');
+            var code = '';
+            digits.forEach(function(d) { code += d.value; });
+
+            if (code.length < 8) {
+                document.getElementById('code-error').style.display = 'flex';
+                document.getElementById('code-error-msg').textContent = 'invalid_code';
+                digits.forEach(function(d) {
+                    if (!d.value) d.style.borderColor = 'var(--red-500)';
+                });
+                return;
+            }
+
+            if (code === '11111111') {
+                // Success
+                closeModal('modal-code');
+                digits.forEach(function(d) { d.value = ''; });
+                document.getElementById('code-error').style.display = 'none';
+
+                // Populate success page
+                var accountText = selectedAccount === 'live' ? '实盘账户 (****8832)' : '模拟盘账户 (****6601)';
+                document.getElementById('success-account').textContent = accountText;
+
+                var scopeNames = ['行情数据', '账户信息', '交易服务', '资金服务'];
+                var checkedScopes = [];
+                document.querySelectorAll('.scope-section .scope-checkbox').forEach(function(cb, idx) {
+                    if (cb.classList.contains('checked')) {
+                        checkedScopes.push(scopeNames[idx]);
+                    }
+                });
+                document.getElementById('success-scopes').innerHTML = checkedScopes.length > 0 ? checkedScopes.join('<br>') : '—';
+
+                var expiry = new Date(Date.now() + 15 * 24 * 60 * 60 * 1000);
+                var expiryStr = expiry.getFullYear() + '-' + String(expiry.getMonth() + 1).padStart(2, '0') + '-' + String(expiry.getDate()).padStart(2, '0') + ' ' + String(expiry.getHours()).padStart(2, '0') + ':' + String(expiry.getMinutes()).padStart(2, '0') + ':' + String(expiry.getSeconds()).padStart(2, '0');
+                document.getElementById('success-expiry').textContent = expiryStr;
+
+                goTo('page-success');
+            } else if (code === '22222222') {
+                // Expired token error
+                document.getElementById('code-error').style.display = 'flex';
+                document.getElementById('code-error-msg').textContent = 'expired_token';
+                digits.forEach(function(d) {
+                    d.style.borderColor = 'var(--red-500)';
+                });
+            } else {
+                // Invalid code error
+                document.getElementById('code-error').style.display = 'flex';
+                document.getElementById('code-error-msg').textContent = 'invalid_code';
+                digits.forEach(function(d) {
+                    d.value = '';
+                    d.style.borderColor = 'var(--red-500)';
+                });
+                digits[0].focus();
+            }
+        }
+
+        function clearCodeError() {
+            document.getElementById('code-error').style.display = 'none';
+            document.querySelectorAll('.device-code-digit').forEach(function(d) {
+                d.style.borderColor = '';
+            });
+        }
+    </script>
+</body>
+</html>

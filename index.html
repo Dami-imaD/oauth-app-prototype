@@ -1207,7 +1207,7 @@
                             <span id="detail-redirect" style="color:var(--gray-700);font-family:'JetBrains Mono',monospace;font-size:12px;">—</span>
                         </div>
                         <div style="display:flex;align-items:flex-start;font-size:13px;">
-                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">可操作账户</span>
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">账户范围</span>
                             <span id="detail-account" style="color:var(--gray-700);">—</span>
                         </div>
                     </div>
@@ -1356,6 +1356,18 @@
                 createdAt: '2026-06-01',
                 expiryAt: '2026-06-16 10:00:00',
                 redirectUri: 'http://localhost:3000/callback'
+            },
+            {
+                name: 'AI 自动交易助手',
+                clientId: 'cid_m7n3p8q2w5xt',
+                clientSecret: 'sec_k4j8h2f6d9s1w3',
+                hasSecret: true,
+                hasCli: true,
+                authorized: false,
+                revoked: true,
+                createdAt: '2026-07-05',
+                expiryAt: '2026-07-20 11:00:00',
+                redirectUri: null
             }
         ];
 
@@ -1425,7 +1437,9 @@
                 var isExpired = app.expired || new Date(app.expiryAt) < new Date();
 
                 var statusHtml;
-                if (app.authorized && !isExpired) {
+                if (app.revoked) {
+                    statusHtml = '<span class="status-badge" style="background:#f3f4f6;color:#4b5563;">已撤销</span>';
+                } else if (app.authorized && !isExpired) {
                     statusHtml = '<span class="status-badge" style="background:#ecfdf5;color:#065f46;">已授权</span>';
                 } else if (isExpired) {
                     statusHtml = '<span class="status-badge" style="background:#fef2f2;color:#991b1b;">已过期</span>';
@@ -1433,8 +1447,8 @@
                     statusHtml = '<span class="status-badge">未授权</span>';
                 }
 
-                // Show delete only for unauthorized and expired
-                var canDelete = !app.authorized || isExpired;
+                // Show delete only for unauthorized, expired, and revoked
+                var canDelete = !app.authorized || isExpired || app.revoked;
                 var deleteHtml = canDelete
                     ? '<a class="table-link" style="color:#dc2626;margin-left:12px;" onclick="currentAppIdx=' + idx + ';confirmDelete()">删除</a>'
                     : '';
@@ -1454,14 +1468,17 @@
             document.getElementById('detail-name').textContent = app.name;
             document.getElementById('detail-client-id').textContent = app.clientId;
 
-            // Secret
-            var secretRow = document.getElementById('detail-secret-row');
+            // Secret - always show
+            var secretEl = document.getElementById('detail-secret');
+            var eyeBtn = document.getElementById('secret-eye-btn');
             if (app.hasSecret) {
-                secretRow.style.display = 'flex';
-                document.getElementById('detail-secret').textContent = '••••••••••••';
-                document.getElementById('detail-secret').dataset.value = app.clientSecret;
+                secretEl.textContent = '••••••••••••';
+                secretEl.dataset.value = app.clientSecret;
+                eyeBtn.style.display = '';
             } else {
-                secretRow.style.display = 'none';
+                secretEl.textContent = '—';
+                secretEl.dataset.value = '';
+                eyeBtn.style.display = 'none';
             }
 
             // Redirect
@@ -1474,10 +1491,10 @@
 
             var isExpired = app.expired || new Date(app.expiryAt) < new Date();
 
-            // 可操作账户
+            // 账户范围
             var detailAccount = document.getElementById('detail-account');
             if (app.authorized && !isExpired) {
-                detailAccount.textContent = '****8832（实盘）';
+                detailAccount.textContent = '实盘账户';
             } else {
                 detailAccount.textContent = '—';
             }
@@ -1493,7 +1510,14 @@
             var lastAuthValue = document.getElementById('detail-last-auth-value');
             var lastAccessValue = document.getElementById('detail-last-access-value');
 
-            if (app.authorized && !isExpired) {
+            if (app.revoked) {
+                statusBadge.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#4b5563;"></span>已撤销';
+                statusBadge.style.background = '#f3f4f6';
+                statusBadge.style.color = '#4b5563';
+                lastAuthValue.textContent = '2026-07-20 14:30:00';
+                lastAccessValue.textContent = '2026-07-22 09:15:00';
+                revokeSection.style.display = 'none';
+            } else if (app.authorized && !isExpired) {
                 statusBadge.innerHTML = '<span style="width:6px;height:6px;border-radius:50%;background:#065f46;"></span>已授权';
                 statusBadge.style.background = '#ecfdf5';
                 statusBadge.style.color = '#065f46';
@@ -1581,6 +1605,7 @@
         function executeConfirm() {
             if (confirmAction === 'revoke' && currentAppIdx >= 0) {
                 apps[currentAppIdx].authorized = false;
+                apps[currentAppIdx].revoked = true;
                 closeConfirm();
                 closeDetail();
                 renderAppTable();
