@@ -663,20 +663,20 @@
 
             <!-- Step 1 -->
             <div class="section-title">选择授权账户类型</div>
-            <div class="info-banner">一次授权仅支持一种账户类型。如需同时访问模拟盘账户和实盘账户，请分别发起两次授权。</div>
+            <div class="info-banner">每个应用仅可授权一种账户类型，如需支持其他账户类型，请使用新的应用进行授权。</div>
 
             <div class="radio-card selected" onclick="selectAccount(this, 'demo')">
                 <div class="radio-dot"></div>
                 <div>
-                    <div class="radio-card-title">模拟盘账户 <span style="font-weight:400;color:var(--gray-400);font-size:12px;margin-left:4px;">****6601</span></div>
+                    <div class="radio-card-title">模拟盘账户</div>
                     <div class="radio-card-desc">使用虚拟资金进行模拟交易，不涉及真实资金或资产</div>
                 </div>
             </div>
             <div class="radio-card" onclick="selectAccount(this, 'live')">
                 <div class="radio-dot"></div>
                 <div>
-                    <div class="radio-card-title">实盘账户 <span style="font-weight:400;color:var(--gray-400);font-size:12px;margin-left:4px;">****8832</span></div>
-                    <div class="radio-card-desc">使用真实资金进行交易。授权后，应用将按照您授予的权限访问和操作您的实盘账户。</div>
+                    <div class="radio-card-title">实盘账户</div>
+                    <div class="radio-card-desc">使用真实资金进行交易。授权后，应用将按照您授予的权限访问和操作您名下所有实盘账户。</div>
                 </div>
             </div>
 
@@ -743,8 +743,8 @@
 
             <div style="border-top:1px solid var(--gray-100);padding-top:16px;">
                 <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100);">
-                    <span style="font-size:13px;color:var(--gray-500);">授权账户</span>
-                    <span id="success-account" style="font-size:13px;color:var(--gray-900);font-weight:500;">模拟盘账户 (****6601)</span>
+                    <span style="font-size:13px;color:var(--gray-500);">账户范围</span>
+                    <span id="success-account" style="font-size:13px;color:var(--gray-900);font-weight:500;">模拟盘账户</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--gray-100);">
                     <span style="font-size:13px;color:var(--gray-500);flex-shrink:0;">授权权限</span>
@@ -769,6 +769,19 @@
             <div class="result-title">授权失败</div>
             <div class="result-msg">设备码无效或已过期，请返回重试。</div>
             <button class="btn-primary" onclick="goTo('page-auth')">返回重试</button>
+        </div>
+    </div>
+
+    <!-- Modal: Replace Auth -->
+    <div id="modal-replace-auth" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-replace-auth')">
+        <div class="modal-box" style="max-width:380px;">
+            <div class="modal-icon" style="background:var(--yellow);display:flex;align-items:center;justify-content:center;">
+                <svg style="width:24px;height:24px;stroke:#1a1a2e;" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+            </div>
+            <div class="modal-title">存在历史授权</div>
+            <div class="modal-desc" style="margin-bottom:24px;line-height:1.6;">该应用已有授权，确认取消原授权并使用本次授权？</div>
+            <button class="btn-primary" onclick="closeModal('modal-replace-auth');hasHistoryAuth=false;proceedAuthorize()">确认</button>
+            <button class="btn-secondary" onclick="closeModal('modal-replace-auth')">取消</button>
         </div>
     </div>
 
@@ -896,7 +909,7 @@
             if (pwd.length < 6) {
                 // Not enough digits
                 document.getElementById('pwd-error').textContent = '请输入完整的 6 位交易密码';
-                document.getElementById('pwd-error').style.display = '';
+                document.getElementById('pwd-error').style.display = 'block';
                 digits.forEach(function(d) {
                     if (!d.value) d.style.borderColor = 'var(--red-500)';
                 });
@@ -915,12 +928,11 @@
             } else {
                 // Error
                 document.getElementById('pwd-error').textContent = '交易密码错误，请重新输入';
-                document.getElementById('pwd-error').style.display = '';
+                document.getElementById('pwd-error').style.display = 'block';
                 digits.forEach(function(d) {
                     d.value = '';
                     d.style.borderColor = 'var(--red-500)';
                 });
-                digits[0].focus();
             }
         }
 
@@ -930,6 +942,8 @@
                 d.style.borderColor = '';
             });
         }
+
+        var hasHistoryAuth = true; // Mock: simulate user has existing authorization
 
         function handleAuthorize() {
             // Check agreement
@@ -946,6 +960,16 @@
             }
             document.getElementById('agreement-hint').style.display = 'none';
 
+            // Check if user has existing authorization
+            if (hasHistoryAuth) {
+                openModal('modal-replace-auth');
+                return;
+            }
+
+            proceedAuthorize();
+        }
+
+        function proceedAuthorize() {
             var isLive = selectedAccount === 'live';
             var highRiskChecked = false;
             document.querySelectorAll('.scope-checkbox[data-risk="high"]').forEach(function(cb) {
@@ -996,7 +1020,7 @@
                 document.getElementById('code-error').style.display = 'none';
 
                 // Populate success page
-                var accountText = selectedAccount === 'live' ? '实盘账户 (****8832)' : '模拟盘账户 (****6601)';
+                var accountText = selectedAccount === 'live' ? '实盘账户' : '模拟盘账户';
                 document.getElementById('success-account').textContent = accountText;
 
                 var scopeNames = ['行情数据', '账户信息', '交易服务', '资金服务'];
