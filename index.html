@@ -1178,20 +1178,16 @@
                             <span id="detail-client-id" style="color:var(--gray-900);font-family:'JetBrains Mono',monospace;font-size:12px;">cid_abc123xyz456</span>
                             <button onclick="copyText('detail-client-id')" style="margin-left:8px;background:none;border:none;cursor:pointer;color:var(--blue-600);font-size:11px;font-family:inherit;">复制</button>
                         </div>
-                        <div id="detail-secret-row" style="display:flex;align-items:center;font-size:13px;">
-                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">Client Secret</span>
-                            <span id="detail-secret" style="color:var(--gray-900);font-family:'JetBrains Mono',monospace;font-size:12px;">••••••••••••</span>
-                            <button id="secret-eye-btn" onclick="toggleSecret()" style="margin-left:8px;background:none;border:none;cursor:pointer;color:var(--gray-400);display:flex;align-items:center;" title="点击查看">
-                                <svg id="eye-closed" style="width:16px;height:16px;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.878 9.878L6.59 6.59m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
-                                <svg id="eye-open" style="width:16px;height:16px;display:none;" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/></svg>
-                            </button>
+                        <div style="display:flex;align-items:flex-start;font-size:13px;">
+                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">回调地址</span>
+                            <span id="detail-redirect" style="color:var(--gray-700);font-family:'JetBrains Mono',monospace;font-size:12px;">—</span>
                         </div>
                     </div>
                 </div>
 
-                <!-- 应用配置 -->
+                <!-- 授权配置 -->
                 <div style="margin-bottom:24px;padding-top:20px;border-top:1px solid var(--gray-100);">
-                    <h3 style="font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:14px;">应用配置</h3>
+                    <h3 style="font-size:14px;font-weight:600;color:var(--gray-900);margin-bottom:14px;">授权配置</h3>
                     <div style="display:flex;flex-direction:column;gap:10px;">
                         <div style="display:flex;align-items:flex-start;font-size:13px;">
                             <span style="color:var(--gray-500);width:110px;flex-shrink:0;">权限范围</span>
@@ -1201,10 +1197,6 @@
                                 <span style="padding:2px 8px;background:#ecfdf5;border-radius:4px;font-size:11px;color:#065f46;">交易下单</span>
                                 <span style="padding:2px 8px;background:#ecfdf5;border-radius:4px;font-size:11px;color:#065f46;">资金划转</span>
                             </div>
-                        </div>
-                        <div style="display:flex;align-items:flex-start;font-size:13px;">
-                            <span style="color:var(--gray-500);width:110px;flex-shrink:0;">回调地址</span>
-                            <span id="detail-redirect" style="color:var(--gray-700);font-family:'JetBrains Mono',monospace;font-size:12px;">—</span>
                         </div>
                         <div style="display:flex;align-items:flex-start;font-size:13px;">
                             <span style="color:var(--gray-500);width:110px;flex-shrink:0;">账户范围</span>
@@ -1271,6 +1263,26 @@
         </div>
     </div>
 
+    <!-- Secret Modal -->
+    <div id="modal-secret" class="modal-overlay" style="z-index:1200;" onclick="if(event.target===this)closeModal('modal-secret')">
+        <div class="modal-box" style="max-width:420px;">
+            <div class="modal-body" style="padding:28px 28px 24px;">
+                <div style="display:flex;align-items:center;gap:8px;margin-bottom:16px;">
+                    <svg style="width:20px;height:20px;color:#f59e0b;" fill="currentColor" viewBox="0 0 24 24"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/></svg>
+                    <h3 style="font-size:16px;font-weight:600;color:var(--gray-900);">请妥善保存 Client Secret</h3>
+                </div>
+                <p style="font-size:13px;color:var(--gray-600);line-height:1.6;margin-bottom:16px;">Client Secret 仅展示一次，关闭后将无法再次查看及修改。请立即复制并安全保存。</p>
+                <div style="background:var(--gray-50);border:1px solid var(--gray-200);border-radius:8px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;">
+                    <span id="secret-display" style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gray-900);word-break:break-all;"></span>
+                    <button onclick="copySecretText()" style="margin-left:12px;background:none;border:none;cursor:pointer;color:var(--blue-600);font-size:12px;font-family:inherit;white-space:nowrap;">复制</button>
+                </div>
+                <div style="display:flex;justify-content:flex-end;">
+                    <button class="btn-submit" onclick="closeModal('modal-secret')">我已保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Toast -->
     <div id="toast" class="toast">应用创建成功</div>
 
@@ -1284,17 +1296,20 @@
         }
 
         // Modal
-        function openModal() {
-            document.getElementById('modal').classList.add('active');
+        function openModal(id) {
+            var modalId = id || 'modal';
+            document.getElementById(modalId).classList.add('active');
             document.body.style.overflow = 'hidden';
         }
 
-        function closeModal() {
-            document.getElementById('modal').classList.remove('active');
+        function closeModal(id) {
+            var modalId = id || 'modal';
+            document.getElementById(modalId).classList.remove('active');
             document.body.style.overflow = '';
-            // Reset form
-            document.getElementById('input-name').value = '';
-            document.getElementById('input-name').classList.remove('error');
+            if (modalId === 'modal') {
+                document.getElementById('input-name').value = '';
+                document.getElementById('input-name').classList.remove('error');
+            }
         }
 
         // URL Fields
@@ -1406,11 +1421,19 @@
             renderAppTable();
             closeModal();
 
-            var toast = document.getElementById('toast');
-            toast.textContent = '应用创建成功';
-            toast.style.background = 'var(--green-600)';
-            toast.classList.add('show');
-            setTimeout(function() { toast.classList.remove('show'); }, 2500);
+            // Show secret modal if secret was enabled
+            if (hasSecret && app.clientSecret) {
+                document.getElementById('secret-display').textContent = app.clientSecret;
+                openModal('modal-secret');
+            } else {
+                showToast('应用创建成功', 'var(--green-600)');
+            }
+        }
+
+        function copySecretText() {
+            var text = document.getElementById('secret-display').textContent;
+            navigator.clipboard.writeText(text);
+            showToast('已复制', 'var(--gray-800)');
         }
 
         function renderAppTable() {
@@ -1467,19 +1490,6 @@
             document.getElementById('detail-title').textContent = app.name;
             document.getElementById('detail-name').textContent = app.name;
             document.getElementById('detail-client-id').textContent = app.clientId;
-
-            // Secret - always show
-            var secretEl = document.getElementById('detail-secret');
-            var eyeBtn = document.getElementById('secret-eye-btn');
-            if (app.hasSecret) {
-                secretEl.textContent = '••••••••••••';
-                secretEl.dataset.value = app.clientSecret;
-                eyeBtn.style.display = '';
-            } else {
-                secretEl.textContent = '—';
-                secretEl.dataset.value = '';
-                eyeBtn.style.display = 'none';
-            }
 
             // Redirect
             document.getElementById('detail-redirect').textContent = app.redirectUri || '—';
@@ -1559,20 +1569,6 @@
             setTimeout(function() { toast.classList.remove('show'); }, 1500);
         }
 
-        function toggleSecret() {
-            var el = document.getElementById('detail-secret');
-            var eyeClosed = document.getElementById('eye-closed');
-            var eyeOpen = document.getElementById('eye-open');
-            if (el.textContent === '••••••••••••') {
-                el.textContent = el.dataset.value;
-                eyeClosed.style.display = 'none';
-                eyeOpen.style.display = '';
-            } else {
-                el.textContent = '••••••••••••';
-                eyeClosed.style.display = '';
-                eyeOpen.style.display = 'none';
-            }
-        }
 
         // Confirm actions
         var confirmAction = null;
