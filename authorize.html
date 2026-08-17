@@ -195,6 +195,14 @@
 
         .btn-primary:hover { background: var(--yellow-hover); }
 
+        .btn-primary:disabled {
+            background: var(--gray-200);
+            color: var(--gray-400);
+            cursor: not-allowed;
+        }
+
+        .btn-primary:disabled:hover { background: var(--gray-200); }
+
         .btn-secondary {
             width: 100%;
             padding: 12px;
@@ -290,63 +298,6 @@
             margin-bottom: 14px;
         }
 
-        /* Radio Cards */
-        .radio-card {
-            border: 2px solid var(--gray-200);
-            border-radius: 10px;
-            padding: 14px 16px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.15s;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-        }
-
-        .radio-card:hover { border-color: var(--gray-300); }
-
-        .radio-card.selected {
-            border-color: var(--yellow);
-            background: #fffdf5;
-        }
-
-        .radio-dot {
-            width: 18px;
-            height: 18px;
-            border-radius: 50%;
-            border: 2px solid var(--gray-300);
-            flex-shrink: 0;
-            margin-top: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.15s;
-        }
-
-        .radio-card.selected .radio-dot {
-            border-color: var(--gray-900);
-        }
-
-        .radio-card.selected .radio-dot::after {
-            content: '';
-            width: 8px;
-            height: 8px;
-            background: var(--gray-900);
-            border-radius: 50%;
-        }
-
-        .radio-card-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--gray-900);
-        }
-
-        .radio-card-desc {
-            font-size: 12px;
-            color: var(--gray-500);
-            margin-top: 2px;
-        }
-
         /* Scope Checkboxes */
         .scope-section { margin-top: 24px; margin-bottom: 24px; }
 
@@ -422,6 +373,102 @@
             margin-top: 16px;
             line-height: 1.5;
         }
+
+        /* Account Multi-Select */
+        .acct-group { margin-bottom: 16px; }
+
+        .acct-group-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .acct-group-title {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--gray-900);
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .acct-group-flag {
+            font-size: 11px;
+            font-weight: 500;
+            padding: 1px 6px;
+            border-radius: 3px;
+        }
+
+        .acct-group-flag.live { color: var(--red-500); background: var(--red-50); }
+        .acct-group-flag.demo { color: var(--gray-500); background: var(--gray-100); }
+
+        .acct-select-all {
+            font-size: 12px;
+            color: var(--blue-600);
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .acct-select-all:hover { text-decoration: underline; }
+
+        .acct-row {
+            border: 2px solid var(--gray-200);
+            border-radius: 10px;
+            padding: 12px 14px;
+            margin-bottom: 8px;
+            cursor: pointer;
+            transition: all 0.15s;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .acct-row:hover { border-color: var(--gray-300); }
+
+        .acct-row.selected {
+            border-color: var(--yellow);
+            background: #fffdf5;
+        }
+
+        .acct-num {
+            font-family: 'JetBrains Mono', monospace;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--gray-900);
+        }
+
+        .acct-empty {
+            border: 1px dashed var(--gray-300);
+            border-radius: 10px;
+            padding: 24px 16px;
+            text-align: center;
+            margin-bottom: 14px;
+        }
+
+        .acct-empty-title {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--gray-600);
+            margin-bottom: 4px;
+        }
+
+        .acct-empty-desc {
+            font-size: 12px;
+            color: var(--gray-400);
+            line-height: 1.5;
+        }
+
+        .acct-empty-link {
+            font-size: 12px;
+            color: var(--blue-600);
+            cursor: pointer;
+            margin-top: 10px;
+            display: inline-block;
+        }
+
+        .acct-empty-link:hover { text-decoration: underline; }
+
 
         /* Modal */
         .modal-overlay {
@@ -625,7 +672,7 @@
                 </div>
             </div>
 
-            <button class="btn-primary" onclick="goTo('page-auth')">登录</button>
+            <button class="btn-primary" onclick="enterAuthPage()">登录</button>
 
             <!-- 手机模式下的切换链接 -->
             <div id="switch-links-phone" style="text-align:center;margin-top:16px;">
@@ -661,24 +708,18 @@
                 <div class="auth-subtitle">申请访问您的老虎账号</div>
             </div>
 
-            <!-- Step 1 -->
-            <div class="section-title">选择授权账户类型</div>
-            <div class="info-banner">每个应用仅可授权一种账户类型，如需支持其他账户类型，请使用新的应用进行授权。</div>
+            <!-- Step 1: 选择授权账户（多选，可混选实盘 / 模拟盘） -->
+            <div class="section-title">选择授权账户</div>
+            <div class="info-banner">可勾选多个账户，支持实盘与模拟盘混合授权。应用将按您授予的权限访问所勾选的账户。</div>
 
-            <div class="radio-card selected" onclick="selectAccount(this, 'demo')">
-                <div class="radio-dot"></div>
-                <div>
-                    <div class="radio-card-title">模拟盘账户</div>
-                    <div class="radio-card-desc">使用虚拟资金进行模拟交易，不涉及真实资金或资产</div>
-                </div>
+            <div id="acct-list"></div>
+
+            <div id="acct-empty" class="acct-empty" style="display:none;">
+                <div class="acct-empty-title">暂无可授权账户</div>
+                <div class="acct-empty-desc">您尚未开通 API 权限，开通后可在此选择要授权的账户。</div>
+                <span class="acct-empty-link" onclick="openApiGuide()">去开通 API 权限</span>
             </div>
-            <div class="radio-card" onclick="selectAccount(this, 'live')">
-                <div class="radio-dot"></div>
-                <div>
-                    <div class="radio-card-title">实盘账户</div>
-                    <div class="radio-card-desc">使用真实资金进行交易。授权后，应用将按照您授予的权限访问和操作您名下所有实盘账户。</div>
-                </div>
-            </div>
+
 
             <!-- Step 2 -->
             <div class="scope-section">
@@ -725,7 +766,7 @@
             <div id="agreement-hint" style="display:none;padding-left:26px;font-size:12px;color:var(--red-500);margin-bottom:6px;">请先勾选同意授权协议</div>
             <div style="margin-bottom:16px;padding-left:26px;font-size:11px;color:var(--gray-400);line-height:1.5;">本授权仅限于您所选择的权限范围，平台不对第三方应用的行为承担责任。</div>
 
-            <button class="btn-primary" onclick="handleAuthorize()">授权</button>
+            <button id="btn-authorize" class="btn-primary" onclick="handleAuthorize()" disabled>授权</button>
             <button class="btn-secondary" onclick="goTo('page-login')">取消</button>
         </div>
     </div>
@@ -738,13 +779,13 @@
                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/></svg>
                 </div>
                 <div class="result-title">授权成功</div>
-                <div class="result-msg" style="margin-bottom:24px;">您已成功授权 My Quant Strategy 访问您的老虎账户，您可前往开发者平台查看授权详情</div>
+                <div class="result-msg" style="margin-bottom:24px;">您可前往开发者平台查看授权详情</div>
             </div>
 
             <div style="border-top:1px solid var(--gray-100);padding-top:16px;">
-                <div style="display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--gray-100);">
-                    <span style="font-size:13px;color:var(--gray-500);">账户范围</span>
-                    <span id="success-account" style="font-size:13px;color:var(--gray-900);font-weight:500;">模拟盘账户</span>
+                <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--gray-100);">
+                    <span style="font-size:13px;color:var(--gray-500);flex-shrink:0;">授权账户</span>
+                    <span id="success-account" style="font-size:13px;color:var(--gray-900);font-weight:500;text-align:right;line-height:1.8;">—</span>
                 </div>
                 <div style="display:flex;justify-content:space-between;align-items:flex-start;padding:10px 0;border-bottom:1px solid var(--gray-100);">
                     <span style="font-size:13px;color:var(--gray-500);flex-shrink:0;">授权权限</span>
@@ -772,16 +813,36 @@
         </div>
     </div>
 
-    <!-- Modal: Replace Auth -->
-    <div id="modal-replace-auth" class="modal-overlay" onclick="if(event.target===this)closeModal('modal-replace-auth')">
+    <!-- Modal: API 开通引导（两态：引导开通 / 确认是否已开通） -->
+    <div id="modal-api" class="modal-overlay">
         <div class="modal-box" style="max-width:380px;">
-            <div class="modal-icon" style="background:var(--yellow);display:flex;align-items:center;justify-content:center;">
-                <svg style="width:24px;height:24px;stroke:#1a1a2e;" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+
+            <!-- 态 1：引导开通 -->
+            <div id="api-state-guide">
+                <div class="modal-icon" style="background:var(--yellow);display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:24px;height:24px;stroke:#1a1a2e;" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.964-.833-2.732 0L4.082 16.5c-.77.833.192 2.5 1.732 2.5z"/></svg>
+                </div>
+                <div class="modal-title">尚未开通 API 权限</div>
+                <div class="modal-desc" style="margin-bottom:24px;line-height:1.6;">您的账户还未开通 API 权限，需先完成开通才能授权应用访问。开通将在新页面打开，完成后返回此页面继续。</div>
+                <button class="btn-primary" onclick="gotoEnableApi()">去开通</button>
+                <button class="btn-secondary" onclick="closeModal('modal-api')">稍后再说</button>
             </div>
-            <div class="modal-title">存在历史授权</div>
-            <div class="modal-desc" style="margin-bottom:24px;line-height:1.6;">该应用已有授权，确认取消原授权并使用本次授权？</div>
-            <button class="btn-primary" onclick="closeModal('modal-replace-auth');hasHistoryAuth=false;proceedAuthorize()">确认</button>
-            <button class="btn-secondary" onclick="closeModal('modal-replace-auth')">取消</button>
+
+            <!-- 态 2：确认是否已开通成功 -->
+            <div id="api-state-confirm" style="display:none;">
+                <div class="modal-icon" style="background:var(--gray-100);display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:24px;height:24px;stroke:var(--gray-700);" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                </div>
+                <div class="modal-title">是否已开通成功？</div>
+                <div class="modal-desc" style="margin-bottom:16px;line-height:1.6;">请在新页面完成 API 权限开通，完成后点击下方按钮重新校验。</div>
+                <div id="api-error" style="display:none;background:var(--red-50);border:1px solid #fecaca;border-radius:8px;padding:10px 14px;margin-bottom:16px;align-items:center;gap:8px;">
+                    <span style="width:18px;height:18px;background:var(--red-500);border-radius:50%;display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;"><svg style="width:10px;height:10px;" fill="none" stroke="#fff" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12"/></svg></span>
+                    <span style="font-size:12px;color:var(--red-500);">未检测到 API 权限，请确认开通完成后重试</span>
+                </div>
+                <button class="btn-primary" onclick="recheckApi()">已完成开通</button>
+                <button class="btn-secondary" onclick="gotoEnableApi()">重新打开开通页</button>
+            </div>
+
         </div>
     </div>
 
@@ -837,11 +898,154 @@
         </div>
     </div>
 
-    <!-- Demo link -->
+    <!-- Demo links -->
     <span class="demo-link" onclick="goTo('page-error')">模拟失败页</span>
+    <span class="demo-link" style="bottom:38px;" onclick="toggleMockApi(this)">校验：模拟成功</span>
 
     <script>
-        var selectedAccount = 'demo';
+        // ===== 账户数据（脱敏：仅展示掩码后四位，非真实账号） =====
+        var ACCOUNTS = [
+            { id: '****8832', kind: 'live' },
+            { id: '****4417', kind: 'live' },
+            { id: '****9025', kind: 'live' },
+            { id: '****6601', kind: 'demo' },
+            { id: '****3300', kind: 'demo' }
+        ];
+
+        var selectedAccounts = [];  // 已勾选的账户 id，支持实盘 / 模拟混选
+        var apiEnabled = false;     // mock：初始未开通 API 权限
+        var mockApiFail = false;    // demo 开关：重新校验时模拟失败
+
+        // 登录后先校验是否开通 API
+        function enterAuthPage() {
+            goTo('page-auth');
+            renderAccounts();
+            if (!apiEnabled) openApiGuide();
+        }
+
+        function renderAccounts() {
+            var list = document.getElementById('acct-list');
+            var empty = document.getElementById('acct-empty');
+
+            // 未开通 API：账户区空态，授权页其余信息照常展示
+            if (!apiEnabled) {
+                list.innerHTML = '';
+                list.style.display = 'none';
+                empty.style.display = '';
+                updateSummary();
+                return;
+            }
+
+            list.style.display = '';
+            empty.style.display = 'none';
+
+            var groups = [
+                { kind: 'live', title: '实盘账户',   flag: '真实资金' },
+                { kind: 'demo', title: '模拟盘账户', flag: '虚拟资金' }
+            ];
+
+            var html = '';
+            groups.forEach(function(g) {
+                var rows = ACCOUNTS.filter(function(a) { return a.kind === g.kind; });
+                if (!rows.length) return;
+
+                var allSel = rows.every(function(a) { return selectedAccounts.indexOf(a.id) > -1; });
+
+                html += '<div class="acct-group">';
+                html += '<div class="acct-group-header">';
+                html += '<div class="acct-group-title">' + g.title + '<span class="acct-group-flag ' + g.kind + '">' + g.flag + '</span></div>';
+                html += '<span class="acct-select-all" onclick="toggleGroupAll(\'' + g.kind + '\')">' + (allSel ? '取消全选' : '全选') + '</span>';
+                html += '</div>';
+
+                rows.forEach(function(a) {
+                    var sel = selectedAccounts.indexOf(a.id) > -1;
+                    html += '<div class="acct-row' + (sel ? ' selected' : '') + '" onclick="toggleAccount(\'' + a.id + '\')">';
+                    html += '<div class="scope-checkbox' + (sel ? ' checked' : '') + '" style="margin-top:0;"></div>';
+                    html += '<span class="acct-num">' + a.id + '</span>';
+                    html += '</div>';
+                });
+
+                html += '</div>';
+            });
+
+            list.innerHTML = html;
+            updateSummary();
+        }
+
+        function toggleAccount(id) {
+            var i = selectedAccounts.indexOf(id);
+            if (i > -1) selectedAccounts.splice(i, 1);
+            else selectedAccounts.push(id);
+            renderAccounts();
+        }
+
+        function toggleGroupAll(kind) {
+            var rows = ACCOUNTS.filter(function(a) { return a.kind === kind; });
+            var allSel = rows.every(function(a) { return selectedAccounts.indexOf(a.id) > -1; });
+            rows.forEach(function(a) {
+                var i = selectedAccounts.indexOf(a.id);
+                if (allSel && i > -1) selectedAccounts.splice(i, 1);
+                if (!allSel && i === -1) selectedAccounts.push(a.id);
+            });
+            renderAccounts();
+        }
+
+        function selectedList() {
+            return ACCOUNTS.filter(function(a) { return selectedAccounts.indexOf(a.id) > -1; });
+        }
+
+        // 混选下按最高风险走：勾中任一实盘账户即视为涉及真实资金
+        function hasLiveSelected() {
+            return selectedList().some(function(a) { return a.kind === 'live'; });
+        }
+
+        function updateSummary() {
+            // 未勾选任何账户前，授权按钮不可点击
+            document.getElementById('btn-authorize').disabled = selectedAccounts.length === 0;
+
+            // 仅在勾中实盘账户时提示需验交易密码
+            document.querySelectorAll('.risk-tag-live').forEach(function(tag) {
+                tag.style.display = hasLiveSelected() ? 'inline-block' : 'none';
+            });
+        }
+
+        // ===== API 开通引导 =====
+        function openApiGuide() {
+            document.getElementById('api-state-guide').style.display = '';
+            document.getElementById('api-state-confirm').style.display = 'none';
+            document.getElementById('api-error').style.display = 'none';
+            openModal('modal-api');
+        }
+
+        // 开放平台管理页：线上仓库里叫 index.html，本地文件叫 oauth-app-management.html
+        function mgmtPageUrl() {
+            return location.hostname.indexOf('github.io') > -1 ? 'index.html' : 'oauth-app-management.html';
+        }
+
+        // 点「去开通」：新页面打开开放平台，同时弹窗切到确认态
+        function gotoEnableApi() {
+            window.open(mgmtPageUrl(), '_blank');
+            document.getElementById('api-state-guide').style.display = 'none';
+            document.getElementById('api-state-confirm').style.display = '';
+            document.getElementById('api-error').style.display = 'none';
+            openModal('modal-api');
+        }
+
+        function recheckApi() {
+            if (mockApiFail) {
+                document.getElementById('api-error').style.display = 'flex';
+                return;
+            }
+            apiEnabled = true;
+            document.getElementById('api-error').style.display = 'none';
+            closeModal('modal-api');
+            renderAccounts();
+        }
+
+        function toggleMockApi(el) {
+            mockApiFail = !mockApiFail;
+            el.textContent = mockApiFail ? '校验：模拟失败' : '校验：模拟成功';
+        }
 
         function switchLoginTab(type) {
             if (type === 'phone') {
@@ -879,18 +1083,6 @@
         function goTo(pageId) {
             document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
             document.getElementById(pageId).classList.add('active');
-        }
-
-        function selectAccount(card, type) {
-            selectedAccount = type;
-            document.querySelectorAll('.radio-card').forEach(function(c) { c.classList.remove('selected'); });
-            card.classList.add('selected');
-
-            // Show/hide 交易密码 tags
-            var tags = document.querySelectorAll('.risk-tag-live');
-            tags.forEach(function(tag) {
-                tag.style.display = type === 'live' ? 'inline-block' : 'none';
-            });
         }
 
         function toggleScope(el) {
@@ -942,8 +1134,6 @@
             });
         }
 
-        var hasHistoryAuth = true; // Mock: simulate user has existing authorization
-
         function handleAuthorize() {
             // Check agreement
             var agreementCheck = document.getElementById('agreement-check');
@@ -959,17 +1149,11 @@
             }
             document.getElementById('agreement-hint').style.display = 'none';
 
-            // Check if user has existing authorization
-            if (hasHistoryAuth) {
-                openModal('modal-replace-auth');
-                return;
-            }
-
             proceedAuthorize();
         }
 
         function proceedAuthorize() {
-            var isLive = selectedAccount === 'live';
+            var isLive = hasLiveSelected();
             var highRiskChecked = false;
             document.querySelectorAll('.scope-checkbox[data-risk="high"]').forEach(function(cb) {
                 if (cb.classList.contains('checked')) highRiskChecked = true;
@@ -1018,9 +1202,11 @@
                 digits.forEach(function(d) { d.value = ''; });
                 document.getElementById('code-error').style.display = 'none';
 
-                // Populate success page
-                var accountText = selectedAccount === 'live' ? '实盘账户' : '模拟盘账户';
-                document.getElementById('success-account').textContent = accountText;
+                // Populate success page：逐个列出已授权账户
+                var selAccts = selectedList();
+                document.getElementById('success-account').innerHTML = selAccts.map(function(a) {
+                    return a.id + '（' + (a.kind === 'live' ? '实盘' : '模拟盘') + '）';
+                }).join('<br>') || '—';
 
                 var scopeNames = ['行情数据', '账户信息', '交易服务', '资金服务'];
                 var checkedScopes = [];
